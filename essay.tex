@@ -10,7 +10,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{subcaption}
-
+\usepackage[nottoc,numbib]{tocbibind}
 \usepackage{titlesec}
 \titleformat{\chapter}{\normalfont\huge\bf}{\thechapter.}{20pt}{\huge\bf}
 
@@ -164,9 +164,13 @@ Examples of interesting research questions to address during this work could be
 The work could also include experimentation with different evolutionary or genetic algorithms in the search for optimal path through the PathNet. Recall that this was suggested but not addressed by Mnih et al. in \cite{pathnet}.
 
 
+\cleardoublepage
+\phantomsection
+
+\addcontentsline{toc}{chapter}{Bibliography}
 
 %Printing bibliography
-\newpage
+%\newpage
 \emergencystretch=2em
 \printbibliography
 \end{document}
