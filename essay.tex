@@ -114,6 +114,9 @@ Efforts have been made to mitigate catastrophic forgetting in NNs during trainin
 Using EWC, Kirkpatrick et al.\cite{ewc} was able to train the same NN on 10 different Atari games without the effects of catastrophic forgetting between training tasks. With a human-normalized score of 1 for each game, giving a total possible score\footnote{where is 0 the same as a random agent, and 10 is at least human-level performance on all games.} of 10, the EWC driven training reached a score of around 6 after 500 million training frames, while the control never reached anything higher than 1.
 
 
+\subsection{Curriculum Learning}
+To guide an NN through a learning process, curriculum learning is a technique shown to work well. By gradually increasing the complexity of a learning task from simpler level until the desired complexity is reached, Bengio et al. \cite{curriculumlearning} was able to show a lower average test error and decreased convergence speed for multiple learning scenarios, as well as an increase in the quality of the local minima obtained.
+
 \section{Progressive Neural Networks}\label{pnn}
 Google DeepMind published a paper in September of 2016\cite{progressiveneuralnetworks} where they addressed the problem of catastrophic forgetting during transfer learning with fine-tuning. Their proposed solution, Progressive Neural Networks (PNN) were shown to be able to learn multiple tasks sequentially without overwriting the previously trained weights. This was done by horizontally scaling the DNN with a new stack of layers for each new task the PNN was applied to.
 
