@@ -1,0 +1,33 @@
+\documentclass[a4paper,english]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{babel,duomasterforside}
+\usepackage[backend=biber]{biblatex}
+\bibliography{library.bib}
+\usepackage{csquotes}
+
+
+\title{Master Thesis}
+\subtitle{Transfer learning with horizontally scaled Neural Networks}
+\author{Martin J. Hovin}
+
+\begin{document}
+
+\duoforside[dept={Institute for informatics},
+program={Nanoelectronics and Robotics: Robotics and Intelligent Systems},
+long]
+
+%List tables of various content
+\tableofcontents
+\listoffigures
+\listoftables
+
+\chapter{Introduction}
+\section{Noe om maskinlæring...}
+Test av \cite{mabu2007graph} som er en sitering
+
+
+%Printing bibliography
+\newpage
+\emergencystretch=2em
+\printbibliography
+\end{document}
