@@ -7,7 +7,7 @@ In these experiments, this will be tested by manipulating the selection pressure
     \item How would a changing selection pressure affect learning? 
 \end{itemize}
 
-\section{Description}
+\section{Description}\label{Search-datasets}
 \subsection{Data-sets} \label{Search-experiment:Datasets}
 To address these questions a trial of different searches have been applied to a PathNet structure for a selection of tasks. As with the first-path experiments, the search algorithms will be applied to image classification tasks. Building on what we learned with regards to task difficulty, two different data-sets have been selected, and the different tasks will be derived from this data. The tasks will be ordered by assumed difficulty to follow a gradual learning mentality. 
 
@@ -102,8 +102,8 @@ While it is obvious that calculation time grows linearly for larger population s
 
 During a search for an optimal path as solution to a given task, the total training effort spent on the task is spread across the modules available for training. This means when the search is terminated and the optimal path have been locked to future back propagation, most of the updated parameters are lost due to the re-initialization of PathNet. While total computational efficiency is not something addressed in this thesis, the ratio of used training effort to the total training spent on a task is an interesting metric. This ratio is highly dependent on how quickly a population converges to one optimal path. In scenarios where this occur fairly early on in the lifetime of the search, every subsequent generation performs training where almost all is along the optimal path. We would therefore expect algorithms with a high selection pressure to be placed high in a ranking of useful training. See \ref{Search-implementation} for description of a training unit. 
 
-\section{Hypothesis}
-The expectations for these experiments were heavily influenced by the results in the first-path experiments. When the training schemes are viewed in a simplified context of only "exploration vs exploitation", we can place them on a scale between these extremes, and discuss expected outcomes from each end of the spectrum. 
+\section{Hypothesis}\label{Search-hypothesis}
+The expectations for these experiments were heavily influenced by the results in the first-path experiments. When the training algorithms are viewed in a simplified context of only "exploration vs exploitation", we can place them on a scale between these extremes and discuss expected outcomes from each end of the spectrum. In this context, the Pick+Search learning scheme used in the first-path experiments would fall on the exploitation.
 
 During a search, a given algorithm would have a population with consistently high diversity until the population converges to an optimal path. This convergence rate, and therefore also population diversity, is determined by which end of the exploration/exploitation spectrum we select our algorithm from. Since we limit ourselves by only changing the tournament size, we would expect a lower tournament size to lead to a low convergence rate and high diversity. This is a natural assumption to make considering the maximum change that occur in the population from one generation to the next. A tournament search with tournament size two has such a low selection pressure that from one generation to the next, only one instance of genotypic change is applied the the population\footnote{This is when the weakest genotype is replaced by the winner of the tournament}. The number of generations until the population have converged to one optimal path would therefore be higher under such a search, than a search where the selection pressure is considerable higher. 
 
@@ -133,19 +133,29 @@ In addition to the static tournament sizes with a winner-replace-all crossover s
 %% more ruse
 %%% As effect of more reuse -> less used capacity in the pathnet
  
-
-
 \section{Implementation}\label{Search-implementation}
-% Explain Pathnet structure and modules 
-%% based on cSVHN testing, futher increase in module complexity
-%% Pathnet layersize increase so there is enough modules for every task to use only novel weights
+The PathNet structure used for these experiments had three layers of 20 modules in each where each path may contain one, two or three modules in each layer. The 20 modules were selected to make sure there would be a a non-zero probability of selecting only empty modules for all tasks, even if all optimal tasks contained the maximum number of modules without any module overlap between tasks.
+
+As with the refined first-path experiments, only convolutional modules were used, but with two channels each instead of the one in first-path. To verify, a random path with these hyper-parameters were created and applied to the task of full cSVHN classification and was able to reach a satisfactory performance within a reasonable training time. All modules use a ReLU-activation function and the Adam optimizer were used during back propagation with a learning rate of 0.0001. 
+
+Each convolutional module also includes a batch-normalization operation and the last module ends in a max-pooling before the output is flattened and passed through the final unique classification layer. 
+
+As there is a resolution difference between the cSVHN set and MNIST, an additional preprocessing step were applied to the MNIST set. A 2 pixel border of zeros were added to change the dimensions from 28x28 to 32x32. cSVHN images has three-channels of RGB values so the single channel of padded MNIST images were repeated in every color-channel to reach the final dimensions of 32x32x3.  
+
+\begin{figure}[h]
+    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/MNISTpadding+repeating.png}
+    \caption{How MNIST is adapted to have same dimensions as cSVHN. Illustration use dimensions 12x12x3 while cSVHN and adapted MNIST use 32x32x3}
+    \label{fig:MNISTpadding}
+\end{figure}
+
+
 
 %Hyperparameters to search
 %%% Why 100 generations locked instead of acc-threshold?
 %%% 
 %Hyperparameters to pathnet
 
-% Data preprocessing of MNIST -> 32x32x3
+
 
 
 \section{Results}
