@@ -1,0 +1,16 @@
+\begin{table}[]
+\centering
+\begin{tabular}{lll}
+Experiment             & Binary MNIST                                                                                 & Quinary MNIST                                                                                                                                                     \\
+Number of Layers       & 3                                                                                            & 3                                                                                                                                                                 \\
+Number of Modules      & 10                                                                                           & 10                                                                                                                                                                \\
+Module structure       & Dense only                                                                                   & Dense and Conv                                                                                                                                                    \\
+Maximum active modules & 3                                                                                            & 3                                                                                                                                                                 \\
+PathNet structure      & \begin{tabular}[c]{@{}l@{}}Flatten \\ Dense\\ Dense\\ Dense\\ Unique /w softmax\end{tabular} & \begin{tabular}[c]{@{}l@{}}Conv + BatchNormalization\\ Conv + BatchNormalization\\ Conv + BatchNormalization\\ Maxpool\\ Flatten\\ Unique /w softmax\end{tabular} \\
+Task optimizer         & SGD                                                                                          & Adam                                                                                                                                                              \\
+Learning rate          & 0.0001                                                                                       & 0.0001                                                                                                                                                            \\
+Loss function          & Binary Crossentropy                                                                          & Categorical Crossentropy                                                                                                                                         
+\end{tabular}
+\caption{Hyperparameters used in the first-path experiments. A Dense module here consists of 20 fully connected nodes with ReLU activation, while a convolutional module is 1 channel of a 3-by-3 kernel with 1-by-1 stride and ReLU activation.}
+\label{tab:hyperparam}
+\end{table}
