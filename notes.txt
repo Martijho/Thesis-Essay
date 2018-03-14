@@ -1,0 +1,6 @@
+Search mutation mutates all paths in tournament the same. 
+- rerun all algorithms once to check difference
+
+- Reuse of random module selection correct? 
+
+Change "Training accuracy" to Fitness
