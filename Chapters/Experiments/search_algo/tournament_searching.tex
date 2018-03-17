@@ -133,7 +133,7 @@ Due to the experimentation being time-consuming, each algorithm were run 10 time
 
 \subsection{Paths}
 \begin{figure}[p!]%[h]
-    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/Average_path_size.png}
+    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/Average_path_size.pdf}
     \caption{Change in average path size for each tournament scheme plotted for each task.}
     \label{fig:search.avg_path_size}
 \end{figure}
@@ -143,7 +143,7 @@ Figure \ref{fig:search.avg_path_size} visualize the average path size within the
 A feature of this plot is the steep jump and quick convergence to a size for the searches with high selection pressure in for the early generations. Since mutation only causes the index of a module to change by a value between -2 and 2, the size of a path can not change during mutation \footnote{A path can not include the same module multiple times. If a module is mutated to overlap an existing one, it is removed. This causes the path to contain fewer modules, so mutated modules are added back in until original path size is reached.}. This means when algorithms with high selection pressure converges to a size early in the search, the size of paths can never change. For searches with low selection pressure (algorithm 1a, 1b, 2a for the earlier tasks and 2b for the later tasks), the generation limit of 100 is to low to let them reach an optimal size. 
 
 \begin{figure}[p!]%[h]
-    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/Capacity_pr_generation.png}
+    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/Capacity_pr_generation.pdf}
     \caption{The average number of used modules during the multi-task learning sequence. Each jump is caused by the saving of an optimal path and then starting a new search for a new task. }
     \label{fig:search.capacity}
 \end{figure}
@@ -153,7 +153,7 @@ In figure \ref{fig:search.capacity} we can see some of the influence of path siz
 For task 4 the capacity usage have separated for the three algorithm groups. All algorithms with static tournament size use less modules in the total PathNet than the other algorithms, and algorithms with changing tournament size between tasks use less than group three. Note that all algorithms has a higher capacity usage than the dotted gray line which marks the amount of module reuse that would have been reached for 6 tasks if all paths had a random module selection\footnote{These values are reached by a Monte Carlo approach where \(10^{6}\) sequences of 6 random paths were selected in the same sized PathNet and the capacity used averaged.}.
 
 \begin{figure}[p!]%[h]
-    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/Module_reuse_pr_generation.png}
+    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/Module_reuse_pr_generation.pdf}
     \caption{The average module reuse during the multi-task learning sequence. Each jump is caused by the saving of an optimal path, and the next task having more locked modules to reuse. The first 100 generations does not have any previously learned knowledge to reuse.}
     \label{fig:search.reuse}
 \end{figure}
@@ -174,7 +174,7 @@ When visualizing search features for the different algorithms that stem from dif
 As with plot \ref{fig:search.avg_path_size}, high selection pressures lead to rapid changes in diversity. This is because the searches with high selection pressure have a high tournament size compared with the population size. When a generation is over and  the tournament winner replace all losers, the population makes a large shift in diversity unless most of the tournament participants have a similar genome. At that point, the probability that the population have converged is quite large. 
 
 \begin{figure}[p!]%[h]
-    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/frequency_diversity_unique_path_count.png}
+    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/frequency_diversity_unique_path_count.pdf}
     \caption{The number of unique paths within a population. Plotted for every task and every algorithm.}
     \label{fig:search.frequency_diversity_unique}
 \end{figure}
@@ -183,14 +183,14 @@ The Hamming distance between two binary genomes gives what is essentially the ed
 
 \subsection{Training}
 \begin{figure}[p!]%[h]
-    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/Training_accuracy.png}
+    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/Training_accuracy.pdf}
     \caption{Average training accuracy during search. The dotted lines is the average achieved validation accuracy for that task and that algorithm.}
     \label{fig:search.accuracy}
 \end{figure}
 As the training of each path is done during and controlled by the search, how the average training accuracy develops gives an indication of how quickly the algorithms are able to influence the overall PathNet to learn a task. As discussed previously, the act of training one tournament of genomes effect the previously evaluated fitness values. Because of this, the populations average fitness values would be a highly misleading metric to use and therefore what is plotted here is the average fitness score achieved within a each generations tournament. Also plotted is the average validation accuracy reach for each algorithm. This validation score is only calculated after an optimal path have been found for each task, and can therefore not be viewed as a function of generation number. 
 
 \begin{figure}[p!]%[h]
-    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/Training_value.png}
+    \includegraphics[width=\textwidth]{Chapters/Experiments/search_algo/figures/Training_value.pdf}
     \caption{The total amount of training in all optimal paths for each multi-task learning sequence plotted against the cumulative validation accuracy reached for that sequence. The circle size corresponds to the total number of used PathNet modules.}
     \label{fig:search.training_value}
 \end{figure}
@@ -212,7 +212,7 @@ Algorithms 1a and 1c have the lowest convergence rate, and as a result of this h
     \label{eq:H0.accuracy.notLowPressure}
     H_{0}:\bar{\mu}_{1_{a}}=\bar{\mu}_{1_{b}}=\bar{\mu}_{1_{c}}=\bar{\mu}_{2_{a}}=\bar{\mu}_{2_{b}}
 \end{equation*}
-where \(\mu_{x}\) is the mean validation accuracy of algorithm x, gave no p values under the significance level of 0.05, and the alternate hypothesis
+where \(\mu_{x}\) is the mean validation accuracy of algorithm x, gave no p values under the significance level of 0.05\footnote{Significance level 0.05 is used throughout this thesis.}, and the alternate hypothesis
 \begin{equation*}
     \label{eq:H0.accuracy.notLowPressure}
     H_{A}:\bar{\mu}_{a_{i}} \neq \bar{\mu}_{a_{j}} 
@@ -234,7 +234,7 @@ The diversity plots indicates that neither of the algorithms with low selection 
 \subsection{Scaling selection pressure}
 Algorithms 2a and 2b does not differ in performance from each other or the algorithms with low selection pressure, and they do not have a significant difference for any metric other than module reuse. 
 
-After task 3b, the mean reuse in the two algorithms were not significantly different and around 5, but for task 6 there is a jump of 1.5 modules on average. This is prominent in plot \ref{fig:search.reuse}. There is no obvious reason behind this jump except for the tournament size for this task, and a some ANOVA test confirm that algorithms with a high tournament size of 25 for the last task have no significant difference in module reuse.  
+After task 3b, the mean reuse in the two algorithms were not significantly different and around 5, but for task 6 there is a jump of 1.5 modules on average. This is prominent in plot \ref{fig:search.reuse}. There is no obvious reason behind this jump except for the tournament size for this task, and a some ANOVA tests confirm that algorithms with a high tournament size of 25 for the last task have no significant difference in module reuse.  
 
 Regarding convergence rate and diversity metrics, the two algorithms does not produce anything unexpected. Low tournament size leads to low convergence rate and vice versa, meaning both algorithms gradually change between high and low convergence rate depending on whether the algorithm increase or decrease tournament size for each task.
 
@@ -245,21 +245,27 @@ The trade-off for the comparatively high classification accuracy comes in the am
 
 Again by using multiple ANOVA tests, the amount of module reuse for algorithms 3a and 3b for task 4 can be shown to not differ from each other but have a lower reuse than all other algorithms. 
 
-\subsection{Plot \ref{fig:search.avg_path_size}}
-While algorithms in group 1 and 2 follow their group rule of reaching convergence for high selection pressure, or not converge within 100 generations for the low selection pressures, algorithms 3a and 3b both converge within the 100 first generations. This could be because these searching schemes both are effective ways of optimizing the capacity in paths, or it might be that the average selection pressure within these searches is a selection pressure that works well for this generation limit. We can back up this claim by the fact that algorithms 2a and 2b both converge for task 3 and 4, which for these algorithms and these tasks, have about the same tournament size as the average tournament size in 3a and 3b. 
+\subsection{High selection pressure}
+Excluding algorithms 3a and 3b from an ANOVA test tells us there is no significant difference in validation accuracy means for any of the other algorithms, meaning algorithm 1b can not be shown to give better classification accuracy for all its extra training. 
+In fact, excluding algorithm 3b which as mentioned undergo as much training, algorithm 1b has a significantly higher mean than every other algorithm and therefore also a much longer run-time. 
 
-As a paths size can not change due to mutation, it is reasonable that some of the algorithms with high selection pressure finds optimal sizes which is lower than the average initialized size of 6. This effect could lead to the conclusion that for these tasks, algorithms with high tournament size needs less capacity to solve the task. However, this could be a random effect where some of the initialized paths with fewer modules happened to have a higher fitness. As searches with lower selection pressure all row the average path size or keep it the same, it does not seem that a larger path capacity hurts fitness.
-\subsection{Plot \ref{fig:search.hamming_diversity}}
-\subsection{Plot \ref{fig:search.frequency_diversity_unique}}
-\subsection{Plot \ref{fig:search.capacity}}
-\subsection{Plot \ref{fig:search.reuse}}
-compare capacity use for 2a in task 3b and 4 with reuse for the same. Can the spike be caused by a larger capacity use of alg 2a and therefore higher probability of reuse?
-\subsection{Plot \ref{fig:search.accuracy}}
-Algorithm 2a is the most overfitted of the algorithms. Why?
-Lower tournament sizes adapt slower to data because they train fewer modules each generation. Would a longer search duration let lower tournament sizes get even better than high?
-Does the large tournament sizes not improve after 20 generations, or is the learning hidden behind the large tournament size? Is the only difference worth talking about the one between algorithm 3a and 3b? Does the algorithms seem task specific? 
-\subsection{Plot \ref{fig:search.training_value}}
+In metrics such as reuse and capacity use there is no difference between the algorithms with static selection pressure. 
 
 \section{Conclusion}
-- Recomb would probably need a high search termination limit. Modules would overfit before that happens. Other recombination scheme might be better suited for this type of search than the simple one used here. 
-- Low trains quickly and reaches a performance the same as most of the other algorithms. Few total number of training iterations cause the modules not to overfit mentionably. A population of 64 and terminationlimit of 100 might not be well suited for this algorithm though. A higher generation limit would give the algorithm a decent chance at finding a optimal path within its population, and a smaller population size together with maybe a higher mutation rate increase the probability of pretrained(MAYBE JUST A SMALLER PATHNET?) modules to be tried in a path before new modules have optimized so much that introducing a old module to a path would reduce fitness below that of the newly trained modules. - Having a high tournament size for the later searches yield higher module reuse than lower tournament sizes, regardless if the previously trained modules were trained using a high or low tournament size. 
+
+The low selection pressure of algorithm 1c causes it to converge towards an optimal path to slowly in this experiment for any benefit from the high exploration rate to become visible. With a lower population size or a higher search termination limit the algorithm might reach a population with such a low diversity so that we could conclude it had found a path from an area of optimal fitness, but at that point the modules would most likely have overfitted to the training data. In a saturated PathNet the search problem is reduced from being a optimization of both weights and module selection to just module selection where no overfitting can occur\footnote{Theoretically, overfitting could take place in such a setting if we imagine the search space is populated with a vast number of optimal modules adapted to contain only small units of memetic knowledge, but this is an unrealistic scenario far from the structure of this PathNet implementation.}, but in that case, another optimization scheme might work better than tournament search. 
+
+To a lesser extent this is true for algorithm 1a also, where it performs similarly to 1c in every metric except for diversity and convergence where the lower tournament size with no recombination has a higher selection pressure and therefore might reach a population state with an optimal path and mutations on that genotype.  
+
+That being said, the performance of these algorithms is no different from those of high selection pressure and therefore high exploitation, so with regards to training time algorithm 1a and 1c is superior to the others where 1a seems to be the better choice. 
+
+When performing ANOVA tests on the amount of module reuse, a test of the null hypothesis
+\begin{equation*}
+    H_{0}:\bar{\mu}_{1_{a}}=\bar{\mu}_{1_{b}}=\bar{\mu}_{1_{c}}=\bar{\mu}_{2_{b}}=\bar{\mu}_{3_{a}}
+\end{equation*}
+yields a P-value not sufficient to reject \(H_{0}\), while adding either 2a or 3b to the test causes \(H_{0}\) to be rejected. While this makes a case for high selection pressure leading to higher reuse, null hypothesis for \(\bar{\mu}_{2_{a}}=\bar{\mu}_{1_{b}}\) can not be rejected, but 2a and 2b is shown to be significantly different from each other. From this, the conclusion drawn is that more experimental runs are needed to be able to say anything meaningful about what causes an increase in module reuse.
+
+With no change to accuracy but with 4 to 5 times the training amount over algorithms with low selection pressure, the static high tournament size of algorithm 1b is therefore concluded not to be well suited for this type of search. Algorithms 2a and 2b, while having a lower training amount than 1b, does also not improve on accuracy. 
+
+Best performance is reached with algorithm 3a and 3b, where 3b reaches a higher accuracy for the last task. In plot \ref{fig:search.accuracy}, it looks like 3b is still improving when the search is terminated, hinting at the search termination limit might be to low for this algorithm also. The training amount for these algorithms is around the 9000 iterations mark, meaning the increase in accuracy comes by training significantly more. 
+

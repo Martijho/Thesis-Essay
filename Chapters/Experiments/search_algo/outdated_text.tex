@@ -1,4 +1,4 @@
-\chapter{}
+\chapter{on diversity}
  Morrison et al.\cite{populationDiversity} described the pair-wise Hamming distance as one of the most commonly used measures of distance in genotypic space, and is what will be used here to calculate a populations diversity as one scalar metric. In implementation, this algorithm\ref{eq:Hamming} is counting the number of genomes in all pairs of genotypes which is not identical. Another description is the edit distance between two binary genomes. 
 
 
@@ -42,3 +42,10 @@ While it is obvious that calculation time grows linearly for larger population s
     \end{subfigure}%
     \caption{A comparison of pair-wise Hamming distance and \(\Delta\)-diversity. The diversity is the average population diversity for each generation during the search for an optimal path for task 1a. Note the similar curves for each algorithm and the scale on the y-axis}
 \end{figure}
+\chapter{on path size plot}
+While algorithms in group 1 and 2 follow their group rule of reaching convergence for high selection pressure, or not converge within 100 generations for the low selection pressures, algorithms 3a and 3b both converge within the 100 first generations. This could be because these searching schemes both are effective ways of optimizing the capacity in paths, or it might be that the average selection pressure within these searches is a selection pressure that works well for this generation limit. We can back up this claim by the fact that algorithms 2a and 2b both converge for task 3 and 4, which for these algorithms and these tasks, have about the same tournament size as the average tournament size in 3a and 3b. 
+
+As a paths size can not change due to mutation, it is reasonable that some of the algorithms with high selection pressure finds optimal sizes which is lower than the average initialized size of 6. This effect could lead to the conclusion that for these tasks, algorithms with high tournament size needs less capacity to solve the task. However, this could be a random effect where some of the initialized paths with fewer modules happened to have a higher fitness. As searches with lower selection pressure all row the average path size or keep it the same, it does not seem that a larger path capacity hurts fitness.
+\chapter{}
+\chapter{}
+- Low trains quickly and reaches a performance the same as most of the other algorithms. Few total number of training iterations cause the modules not to overfit mentionably. A population of 64 and termination limit of 100 might not be well suited for this algorithm though. A higher generation limit would give the algorithm a decent chance at finding a optimal path within its population, and a smaller population size together with maybe a higher mutation rate increase the probability of pretrained(MAYBE JUST A SMALLER PATHNET?) modules to be tried in a path before new modules have optimized so much that introducing a old module to a path would reduce fitness below that of the newly trained modules. - Having a high tournament size for the later searches yield higher module reuse than lower tournament sizes, regardless if the previously trained modules were trained using a high or low tournament size. 
