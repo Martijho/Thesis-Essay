@@ -1,0 +1,76 @@
+\chapter{Implementation}
+% EDIT NOTE: 
+% Limit overlap in implementation details between this chapter and 
+% experimentation implementation. Build up a base that can be built on in chapter
+% 4 and 5. 
+\section{Python implementation}
+- why python? 
+    - Problems: 
+        - Not quick to run 
+    - Pros: 
+        - Quick to prototype in 
+        - Generally good to debug
+        - Multiple good tools for machine learning
+            - \cite{tensorflow}
+            - \cite{keras}
+            - Why are these good?
+        - Other packages
+            - Matplotlib (visualization)
+            - Numpy (math stuffs)
+            - Pickle (data logging)
+- code structure
+    - Object oriented
+        - Easily parameterizable for ease of prototyping pathnet structures
+    - Class structure: 
+        - Modules
+        - Layers
+        - PathNet
+            - Functionality for
+                - Building random paths
+                - Creating keras models
+                - static methods for creating pathnet structures
+                - reset backend session
+        - Taks
+        - Search
+        - Plot generating
+- Training on gpu
+    - Quicker in general for ML
+    - This implementation do lots on CPU
+        - Other implementations could take advantage of customizing layers and models in keras. 
+- Noteable differences in implementation 
+    - Keras implementasjon
+    - Path fitness not negative error but accuracy
+    - exp 2: fitness calculated before evaluation (not same step)
+    - Not added any noise to training data
+- Implementation problems
+    - Tensorflow sessions not made for using multiple graphs
+        - Resetting backend session after a number of models are made
+    - Tensorflow-gpus default is using all gpu memory it can 
+        - Limiting data allocation to scale when needed
+    - Tensorflow session does not free allocated memory before python thread is done. 
+        - Run all experiments through treads. 
+- Code available on github
+
+\section{datasets}
+- Data type
+- Use cases and citations
+- How does the data look?
+- set sizes and class distributions
+- state of the art and human level performance
+\cite{MNIST}
+\cite{SVHN}
+
+\section{Search implementation}
+- functions. callback to theoretical background and GA buzzwords
+- parameterization
+
+
+\iffalse
+    X   Can you describe your implementation in detail? 
+    X   Why did you use this technology? 
+    X   How does the theory relate to your implementation? 
+    X   What are your underlying assumptions? 
+    X   What did you neglect and what simplifications have you made? 
+    X   What tools and methods did you use? 
+    X   Why use these tools and methods? 
+\fi

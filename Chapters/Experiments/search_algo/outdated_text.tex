@@ -49,3 +49,9 @@ As a paths size can not change due to mutation, it is reasonable that some of th
 \chapter{}
 \chapter{}
 - Low trains quickly and reaches a performance the same as most of the other algorithms. Few total number of training iterations cause the modules not to overfit mentionably. A population of 64 and termination limit of 100 might not be well suited for this algorithm though. A higher generation limit would give the algorithm a decent chance at finding a optimal path within its population, and a smaller population size together with maybe a higher mutation rate increase the probability of pretrained(MAYBE JUST A SMALLER PATHNET?) modules to be tried in a path before new modules have optimized so much that introducing a old module to a path would reduce fitness below that of the newly trained modules. - Having a high tournament size for the later searches yield higher module reuse than lower tournament sizes, regardless if the previously trained modules were trained using a high or low tournament size. 
+\chapter{Conclusion on reuse: removed because of duplication}
+When performing ANOVA tests on the amount of module reuse, a test of the null hypothesis
+\begin{equation*}
+    H_{0}:\bar{\mu}_{1_{a}}=\bar{\mu}_{1_{b}}=\bar{\mu}_{1_{c}}=\bar{\mu}_{2_{b}}=\bar{\mu}_{3_{a}}
+\end{equation*}
+yields a P-value not sufficient to reject \(H_{0}\), while adding either 2a or 3b to the test causes \(H_{0}\) to be rejected. While this makes a case for high selection pressure leading to higher reuse, null hypothesis for \(\bar{\mu}_{2_{a}}=\bar{\mu}_{1_{b}}\) can not be rejected, but 2a and 2b is shown to be significantly different from each other. From this, the conclusion drawn is that more experimental runs are needed to be able to say anything meaningful about what causes an increase in module reuse.

@@ -1,4 +1,4 @@
-\chapter{Initial search experiment}
+\chapter{Experiment 1: Selection versus search}\label{exp2}
 Disregarding what algorithm is used during path searching, training multiple machine learning models are usually rather resource intensive. In the case of training subsets of a Super Neural Network, even more so. Any small reduction in the computation time here will pay off in the long run, especially during experimentation where multiple iterations of PathNet training are going to be preformed. Keeping this motivation in mind, the first experiment I preformed is one where the results either confirm a shortcut in experimentation can safely be made, or will give some insight into the layer interface of a model when applying different training schemes.
 
 The questions I want to answer is simple: \textit{Is there anything to gain from performing a proper search for the first path versus just picking a random path and training those weights using a classic end-to-end training scheme?}
@@ -23,7 +23,7 @@ As data set for task A and B, I chose the MNIST set of handwritten digits. This 
 
 I performed two experiments of this type. First a binary classification scenario where I selected four classes from the ten available in the MNIST set and split them into two groups of two classes as task A and task B. The second experiment was a quinary classification scenario where all 10 classes were used in two groups of five each. The reason for the second experiment is discussed in the result section of experiment one. 
 
-\section{Implementation}
+\section{Implementation}\label{exp1:implementation}
 The implementation of PathNet have already been described in a preceding section of this thesis, so only hyper-parameters used in the experiment will be discussed here.
 
 \subfile{Chapters/Experiments/first_path/hyperparameter_table}

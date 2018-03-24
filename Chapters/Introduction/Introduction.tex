@@ -1,4 +1,76 @@
 \chapter{Introduction}
+From essay. 
+More on multi task learning
+More on transfer learning
 
-\section{Some background etc}
-\section{Some motivation}
+\section{Raise problem: catastrophic forgetting.}
+Multiple solutions (PNN, PN, EWC)
+- Large structures (PNN, PN)
+- Limited in number of tasks it can retains(EWC)
+
+Optimize reuse of knowledge while still providing valid solutions to tasks. More reuse and limited capacity use will increase amount of task a structure can learn. 
+
+where do i start?
+Question DeepMind left unanswered is how different GAs influence task learning and module reuse. 
+Exploration vs exploitation\ref{theoretic background on topic}
+
+why this? broad answers first, specify later. 
+We know PN works. would it work better for different algorithms?
+logical next step from original paper "unit of evolution"
+
+\section{Problem/hypothesis}
+* What do modular PN training do with the knowledge? 
+- More/less accuracy?
+- More/less transferability? 
+Test by learning in end-to-end first then PN search. 
+Difference in performance or reuse?
+
+* Can we make reuse easier by shifting focus of search algorithm?
+- PN original: Naive search. Higher exploitation improve on module selection?
+
+\section{How to answer?}
+- Set up simple multitask scenarios and try. 
+* 2 tasks where first are end to end vs PN
+* List algorithms with different selection pressure and try on multiple tasks. 
+
+\iffalse
+    What is the use of a Nifty Gadget? 
+    What is the problem? 
+    How can it be solved? 
+    What are the previous approaches? 
+    What is your approach? 
+    Why do it this way? 
+    What are your results? 
+    Why is this better? 
+    Is this a new approach? 
+    Why haven't anyone done it before? 
+    or
+    Why do you reiterate previous work? 
+    What is your contribution to the field of Nifty Gadgets? 
+    
+    \section{What should this chapter contain?}
+    Presentation of the problem or phenomenon to be addressed, the situation where the problem or phenomenon occurs, and references to earlier relevant research. 
+    \subsection{Common errors}
+    Problem is not properly specified or formulated; insufficient references to earlier work.  
+    
+    \section{Purpose}
+    What can be gained by more knowledge about the problem or phenomenon. 
+    \subsection{Common errors}
+    The purpose is not mentioned, not connected to earlier research, or not in line with what the actual contents of the thesis.  
+    
+    \section{Problem/Hypothesis} 
+    Questions that need to be answered to reach 
+    the goal and/or hypothesis formulated be means of 
+    underlying theories. 
+    \subsection{Common errors}
+    Missing problem description; deficiencies in the connections between questions; badly formulated 
+    hypothesis.  
+    
+    \section{Method} 
+    Choice of an adequate method with respect to the 
+    purpose and problem/hypothesis. 
+    
+    \subsection{Common errors}
+    An inappropriate method is used, for example due to lack of knowledge about different methods; 
+    erroneous use of chosen method.  
+\fi
