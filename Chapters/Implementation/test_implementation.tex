@@ -14,18 +14,23 @@
 \usepackage{titlesec}
 \usepackage{subfiles}
 \usepackage[export]{adjustbox}[2011/08/13]
+\usepackage{listings}
 \titleformat{\chapter}{\normalfont\huge\bf}{\thechapter.}{20pt}{\huge\bf}
 
 \begin{document}
 
-\title{Experiments}
-\subtitle{Second draft}
+\title{Implementation}
+
+\subtitle{First draft}
 
 \maketitle
 
+\input{Chapters/Implementation/Implementation.tex}
 
-\input{first_path/first_path_search}
-%\input{search_algo/tournament_searching}
+\newpage
 
+\emergencystretch=2em
+
+\printbibliography
 
 \end{document}

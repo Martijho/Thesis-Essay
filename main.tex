@@ -6,6 +6,19 @@
 \usepackage[backend=biber]{biblatex}
 \bibliography{library.bib}
 \usepackage{csquotes}
+\usepackage{pdfpages}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{subcaption}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{titlesec}
+\usepackage{subfiles}
+\usepackage{listings}
+\usepackage[export]{adjustbox}[2011/08/13]
+\titleformat{\chapter}{\normalfont\huge\bf}{\thechapter.}{20pt}{\huge\bf}
+
 
 
 \title{Master Thesis}
@@ -28,12 +41,13 @@ long]
 \input{Chapters/Introduction/Introduction.tex}
 \input{Chapters/Background/Background.tex}
 \input{Chapters/Implementation/Implementation.tex}
-%\input{Chapters/Experiments/Experiments.tex}
 \input{Chapters/Experiments/first_path/first_path_search.tex}
-\input{Chapters/Experiments/search_algo/tournament_searching.tex}
+\input{Chapters/Experiments/search_algo/selection_pressure.tex}
+\input{Chapters/Experiments/relearn/relearn.tex}
 \input{Chapters/Discussion/Discussion.tex}
 
 \newpage
 \emergencystretch=2em
 \printbibliography
 \end{document}
+
