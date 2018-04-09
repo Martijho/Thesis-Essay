@@ -1,3 +1,0 @@
-Search mutation mutates all paths in tournament the same. 
-
-Change "Training accuracy" to Fitness

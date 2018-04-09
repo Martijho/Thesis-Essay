@@ -1,0 +1,30 @@
+\section{Addendum: Algorithms 3a and 3b}
+To verify the change in selection pressure have a effective range from low tournament size for algorithms 1a and 1c and to tournament size 10, algorithms 3a and 3b are run again within this range. MWW tests provided the results found in table \ref{tab:exp2.dynamic_rerun}, where algorithm 3a with the range 2 through 25 is compared to algorithm 3a with range 2 through 10, and the same comparison made for algoritm 3b. 
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{llll}
+               & Task & \multicolumn{1}{c}{3a} & \multicolumn{1}{c}{3b} \\
+    Reuse      & 1b   & 0.956547773748         & 0.956547773748         \\
+               & 2    & 0.538144609699         & 0.562088443212         \\
+               & 3a   & 0.602834473039         & 1.0                    \\
+               & 3b   & 0.757639109903         & 0.696861750189         \\
+               & 4    & 0.268673519581         & 0.783737672219         \\
+    Validation & 1a   & 0.677126445648         & 0.0279501216272        \\
+               & 1b   & 0.939675045144         & 0.448837876623         \\
+               & 2    & 0.596563159763         & 0.677470512773         \\
+               & 3a   & 0.820463098838         & 0.427181486007         \\
+               & 3b   & 0.622390025429         & 0.0815235054997        \\
+               & 4    & 0.0539025571694        & 0.650024629906         \\
+    Path Size  & 1a   & 0.968962593291         & 0.559304946892         \\
+               & 1b   & 0.181629483946         & 0.236641311521         \\
+               & 2    & 0.877045299231         & 0.244033263752         \\
+               & 3a   & 1.0                    & 0.877045299231         \\
+               & 3b   & 0.905680993625         & 0.0624335180351        \\
+               & 4    & 0.136097381114         & 0.308603636093        
+    \end{tabular}
+    \caption{P-values from comparing algorithms 3a and 3b for a tournament size range of \([2,\dots,25]\) with range \([2,\dots,10]\). \(\alpha=1.57\times 10^{-3}\)}
+    \label{tab:exp2.dynamic_rerun}
+\end{table}
+
+While there is an obvious difference in training units because of the reduced number of evaluations during each search, there is no significant difference in any other tested metrics. Confirming the conclusion that for this case of multi-task problems and PathNet structure, the effective range of tournament sizes spans from the minimum 1\footnote{Tournament size 1 is the same as performing a stochastic search} to 10.

@@ -1,53 +1,40 @@
+\input{packages.tex}
 
-\documentclass[a4paper,english]{report}
-\usepackage{subfiles}
-\usepackage[utf8]{inputenc}
-\usepackage{babel,duomasterforside}
-\usepackage[backend=biber]{biblatex}
-\bibliography{library.bib}
-\usepackage{csquotes}
-\usepackage{pdfpages}
-\usepackage{graphicx}
-\usepackage{mathtools}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{subcaption}
-\usepackage[nottoc,numbib]{tocbibind}
-\usepackage{titlesec}
-\usepackage{subfiles}
-\usepackage{listings}
-\usepackage[export]{adjustbox}[2011/08/13]
-\titleformat{\chapter}{\normalfont\huge\bf}{\thechapter.}{20pt}{\huge\bf}
-
-
-
-\title{Master Thesis}
-\subtitle{Transfer learning and modularity in a Super Neural Network}
+\title{Modular Transfer Learning in a Super Neural Network}
+\subtitle{Exploring and exploiting PathNet structures}
 \author{Martin J. Hovin}
 
 \begin{document}
 \duoforside[dept={Institute for informatics},
-program={Nanoelectronics and Robotics: Robotics and Intelligent Systems},
-long]
+            program={Nanoelectronics and Robotics: Robotics and Intelligent Systems},
+            long]
 
-\input{Chapters/Introduction/Acknowledgement.tex}
-\input{Chapters/Introduction/Abstract.tex}
+\input{Chapters/1.Introduction/Acknowledgement.tex}
+\input{Chapters/1.Introduction/Abstract.tex}
 
 
 \tableofcontents
 \listoffigures
 \listoftables
 
-\input{Chapters/Introduction/Introduction.tex}
-\input{Chapters/Background/Background.tex}
-\input{Chapters/Implementation/Implementation.tex}
-\input{Chapters/Experiments/first_path/first_path_search.tex}
-\input{Chapters/Experiments/search_algo/selection_pressure.tex}
-\input{Chapters/Experiments/relearn/relearn.tex}
-\input{Chapters/Discussion/Discussion.tex}
+\input{Chapters/1.Introduction/Introduction.tex}
+\input{Chapters/2.Background/Background.tex}
+\input{Chapters/3.Implementation/Implementation.tex}
+\input{Chapters/4.Experiments/exp1/first_path_search.tex}
+\input{Chapters/4.Experiments/exp2/selection_pressure.tex}
+\input{Chapters/4.Experiments/exp3/relearn.tex}
+\input{Chapters/5.Discussion/Discussion.tex}
+
+
+\begin{appendices}
+    \input{Chapters/Appendices/HammingReduction.tex}
+    \input{Chapters/Appendices/MannWhitney_tables.tex}
+\end{appendices}
+
 
 \newpage
 \emergencystretch=2em
 \printbibliography
+
 \end{document}
 

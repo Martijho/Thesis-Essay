@@ -1,0 +1,64 @@
+\chapter{Pair-wise Hamming reduction}
+\label{appendix:Hammingreduction}
+The main problem with Hamming distance as a metric is that the number of computations needed is quadratic with the population size P. Meaning the computational time is quite long for large populations. In the context of the variable selection pressure experiments, this metric is calculated 42000 times\footnote{Once every generation through all path optimizations for all tasks which is 600. This is then done for every experimental run of every algorithm (70 times)}.
+
+Morrison et al. presented\cite{populationDiversity} an alternative diversity metric which they proved to yield the same results as pair-wise Hamming, but was calculable in linear time with respect to P. Their solution were based on the concept of moment of inertia for measurement of mass distribution into arbitrarily high dimensionality space, where a centroid genome C was calculated for the population of genomes, where the i-th element of that centroid is
+\begin{equation}
+    \label{eq:centroid}
+    C_{i}=\tfrac{1}{P}\sum_{j=1}^{P}y_{ji}
+\end{equation}
+and the moment of inertia I is given as 
+\begin{equation}
+    \label{eq:Inertiadiversity}
+    I  = \sum_{i=1}^{L}\sum_{j=1}^{P}\left ( y_{ij}-C_{i} \right )^{2}
+\end{equation}
+They then go on to prove \(PI\) = pair-wise Hamming distance, in other words that pair-wise Hamming distance is the binary case of the centroid moment of inertia.
+
+Introduced here is a reduction of the pair-wise Hamming formula from having a quadratic computation time with respect to P to a linear computation time under the assumption of binary genome. This method does not improve on the centroid moment of inertia method with the same leap in computation time, but the algorithm derived from this formula is proved to be quicker. 
+
+First, the problem is reduced to having a genome length L = 1 and index \({j}'\) is rename to i for readability.
+\begin{equation*}
+    H_{1}=\sum_{j=1}^{P-1}\sum_{i=j+1}^{P}\left |y_{j}-y_{i}\right |
+\end{equation*}
+Because of the absolute-value, \(\left |y_{j}-y_{i}\right |\) equals \(\left |y_{i}-y_{j}\right |\), which means the nested summations can be rewritten to both span the whole of P.\footnote{This is best visualized as what area of a matrix these sums cover. The sums where both i and j goes from 1 to P would cover the whole matrix, while the original \(H_{1}\) cover a triangle in one of the matrix corners with the last sum in \ref{eq:hammingreductionsums} cover the diagonal of the matrix}
+\begin{equation}
+    \label{eq:hammingreductionsums}
+    \sum_{j=1}^{P}\sum_{i=1}^{P}\left | y_{j}-y_{i} \right | = 2\left [ \sum_{j=1}^{P-1}\sum_{i=j+1}^{P}\left | y_{j}-y_{i} \right | \right ]+ \sum_{i=1}^{P}\left | y_{i}-y_{i} \right | 
+\end{equation}
+The last sum in \ref{eq:hammingreductionsums} evaluates to zero, which means we can express \(H_{1}\) as 
+\begin{equation*}
+    H_{1} = \frac{1}{2}\sum_{j=1}^{P}\sum_{i=1}^{P}\left | y_{j}-y_{i} \right |
+\end{equation*}
+By isolating the inner summation in the new expression for \(H_{1}\) we can hold \(y_{j}\) constant to either either 0 or 1 since \(y_{i}\in\left [0, 1\right]\) for all i.
+
+If \(y_{j}=0\) then the inner sum evaluates to the number of 1's in our set of y's. 
+In the cases of \(y_{j}=0\), the inner sum evaluates to the number of 0's. This is the pair-wise Hamming formula counting the inequalities in the genome within pairs in the population.
+
+Since \(y_{i}\in\left [0, 1\right]\) we can express these sums as
+\begin{equation*}
+    \textnormal{Number of 1's in population} = \sum_{j=1}^{P}y_{j} 
+\end{equation*}
+\begin{equation*}
+    \textnormal{Number of 0's in population} = P-\sum_{j=1}^{P}y_{j}
+\end{equation*}
+
+A this point it becomes clear that what the two sums do is summing the number of ones for every zero in the population plus the number of zeros for every one. Which means we again can rewrite \(H_{1}\). 
+
+\begin{equation*}
+    H_{1} = \frac{1}{2}\left [\sum_{j=1}^{P}y_{j}\left (P - \sum_{j=1}^{P}y_{j} \right) + \left (P - \sum_{j=1}^{P}y_{j} \right)\sum_{j=1}^{P}y_{j}\right ]
+\end{equation*}
+
+\begin{equation}
+    \label{eq:linearHamming}
+    H_{1} = \sum_{j=1}^{P}y_{j}\left (P - \sum_{j=1}^{P}y_{j} \right)
+\end{equation}
+
+The generalization from a 1 dimensional genome to L-dimensions is trivial because when counting pairwise genome differences, the same result is reached whether counting a pair-wise Hamming for each genome separately and then adding them together, or the total Hamming distance is counter for all genes. Ergo, for population of size P of binary genomes of length L
+\begin{equation}
+    \label{eq:proved}
+    \sum_{j=1}^{j=P-1}\sum_{{j}'=j+1}^{{j}'=P}\sum_{i=1}^{i=L}\left |y_{ij}-y_{i{j}'}\right | = \sum_{i=1}^{L}\sum_{j=1}^{P}y_{j}\left (P - \sum_{j=1}^{P}y_{j} \right)
+\end{equation}
+
+This version of the Hamming distance can be calculated in 2LP which is a small improvement on the centroid moment of inertia method which is ran in \(4LP + L\) calculations. 
+
+

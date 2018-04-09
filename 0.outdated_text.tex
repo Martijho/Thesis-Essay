@@ -1,0 +1,51 @@
+\chapter{Monte carlo stuff}
+If we were to run lots of experimental trials we could estimate the probability of each algorithm reusing some amount of trained modules. This observed probability can be denoted as
+\begin{equation*}
+    P_{\text{Algorithm}}\left(O\;\middle|\;p_{1}, p_{2}\right)\text{ ,  } O\leq min(p_{1}, p_{2})
+\end{equation*}
+where \(O\) is some observation of reuse and \(p_{i}\) is the number of modules in path i.
+
+To compare it with the observed Monte-Carlo estimate, we have to remove the probability distribution of path selection from the observated estimates. Meaning
+
+\begin{equation}
+\frac{\hat{P}\left(O\;\middle|\;p_{1}, p_{2}\right)}{P(p_{1})\times P(p_{2})} = \hat{P}(O)
+\label{eq:probabilityreuse}
+\end{equation}
+where \(O\leq min(p_{1}, p_{2})\) and \(\hat{P}(O)\) is the Monte-Carlo estimated probability of observation \(O\).
+
+When creating random paths for population initialization, the probability of selecting \(\Omega_{i}\) number of modules in layer i is uniform for all numbers in \([1, \dots, \omega]\). This means the probability of randomly generating a path with \(N\) number of active modules is 
+\begin{equation}
+    P(N)=\frac{1}{\omega^{L}}\times\gamma    
+\end{equation}
+where \(\gamma\) is the number of layer permutations that yield \(N\) active modules. 
+
+\input{Chapters/Experiments/relearn/tables/pathsizeprob.tex}
+
+For a 6-by-3 PathNet with \(\omega=3\), we get the probability distribution in table \ref{tab:sizeprob}. This probability distribution is built into the reuse probability estimated with Monte-Carlo, as it is based on random path selection.
+
+By normalizing the Monte-Carlo estimates by the probabilities in table \ref{tab:sizeprob}, we can compare the experimental results to that of theoretical reuse when randomly selecting paths
+
+
+\chapter{Analysis of Variance}
+\label{background:ANOVA}
+An analysis of variance (ANOVA) provide a way of comparing \(n\) groups of measurements to each other under the null-hypothesis that they are all drawn from the same distribution and have the same average. 
+\begin{equation*}
+    H_{0}: \mu_{1}=\mu_{2}=\mu_{3}=\dots=\mu_{n}
+\end{equation*}
+The alternate hypothesis in this case would be 
+\begin{equation*}
+    H_{A}: \mu_{i}\neq\mu_{j} \text{ for \(i, j \in [1 \dots n]\) and \(i \neq j\)}
+\end{equation*}
+This means a ANOVA test can not say which groups (\(i\) and \(j\)) were significantly different from each other, only that at least two groups were. 
+
+Resulting from an ANOVA test is a F-score, where the F is given as
+\begin{equation*}
+    F=\frac{\text{SS}_{\text{B}}}{\text{SS}_{\text{e}}}
+    \times
+    \frac{n-m}{m-1}
+\end{equation*}
+where \(n\) is the total number of observations, m is the number of groups, \(\text{SS}_{\text{B}}\) is sum of squares between the group means and the total mean and \(\text{SS}_{\text{e}}\) is the sum of squares between each observation and that observations group mean. 
+
+This F-ratio is looked up in a F-distribution table to find a corresponding p-value. If this value is smaller than some predetermined significance level, the we can discard the null-hypothesis and accept the alternate hypothesis \(H_{A}\). In this thesis, and most other, a significance level of 0.05 is used. 
+
+A more detailed description of variance analysis can be found in \cite{anova}.
