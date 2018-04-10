@@ -1,8 +1,9 @@
-\chapter{Experiment 2: Selection pressure}\label{exp2}
+\chapter{Experiment 2: Selection pressure}
+\label{exp2}
 In the original paper, Fernando et al. used a tournament search algorithm for path optimization. This algorithm was selected on the basis that it fills the role of simplest possible 'agent' for path-selection, one which can be considered a unit of evolution.  The tournament implementation fits this description as a 'unit' because of the tournament size used. Within one generation, the total change in the population is one genotype being replaced with another from the same population and subjected to mutation under some probability. Building on the previous set of experiments where the conclusion can take form as an argument in favour of a high exploration rate during path-search, we would expect a tournament of size two to yield modules with high transferability and a high number of reuse compared to a high tournament size. In these experiments, this will be tested by manipulating the selection pressure during the tournament search. Questions addressed in this section is: 
 \begin{itemize}
     \item How would different evolutionary algorithms influence outcomes in training a PathNet structure on multiple tasks?
-    \item What evolutionary strategies make the most sense in the scheme of training an SNN?
+    \item What genetic programming strategies make the most sense in the scheme of training an SNN?
     \item How would a changing selection pressure affect learning? 
 \end{itemize}
 \newpage
@@ -78,7 +79,8 @@ To confirm the ordering of algorithms on the exploration/exploitation scale, a p
 
 During a search for an optimal path as solution to a given task, the total training effort spent on the task is spread across the modules available for training. This means when the search is terminated and the optimal path have been locked to future back propagation, most of the updated parameters are lost due to the re-initialization of open modules. While total computational efficiency is not something addressed in this thesis, the ratio of used training effort to the total training spent on a task is an interesting metric. This ratio is highly dependent on how quickly a population converges to one optimal path. In scenarios where this occur fairly early on in the lifetime of the search, every subsequent generation performs training where almost all is along the optimal path. We would therefore expect algorithms with a high selection pressure to be placed high in a ranking of useful training. See \ref{exp2:implementation} for description of a training unit. 
 
-\section{Hypothesis}\label{exp2:hypothesis}
+\section{Hypothesis}
+\label{exp2:hypothesis}
 The expectations for these experiments were heavily influenced by the results in the first-path experiments. When the training algorithms are viewed in a simplified context of only "exploration vs exploitation", we can place them on a scale between these extremes and discuss expected outcomes from each end of the spectrum. In this context, the Pick+Search learning scheme used in the first-path experiments would fall on the exploitation side.
 
 During a search, a given algorithm reduces the population diversity from a initialized state of high diversity until some optimal path is found. This convergence rate, and therefore also population diversity, is determined by which end of the exploration/exploitation spectrum we select our algorithm from. Since we limit ourselves by only changing the tournament size, we would expect a lower tournament size to lead to a low convergence rate and high diversity. This is a natural assumption to make considering the maximum change that occur in the population from one generation to the next. A tournament search with size two has such a low selection pressure that from one generation to the next, only one instance of genotypic change is applied the the population\footnote{This is when the weakest genotype is replaced by the winner of the tournament}. The number of generations until the population have converged to one optimal path would therefore be higher under such a search than a search where the selection pressure is considerable higher. 
@@ -93,7 +95,8 @@ In summary, a high tournament size is expected to shift the search algorithm in 
 
 It is hard to tell how the validated classification accuracy on the final task will be affected by the different algorithms. As with the previous experiments, the tasks selected might prove to be to simple which would hide much of the potential in transfer learning since a path of average since should be able to learn each task \textit{tabula rasa}.
 
-\section{Implementation}\label{exp2:implementation}
+\section{Implementation}
+\label{exp2:implementation}
 
 \textbf{Edit note: Compare implementation to that of DeepMind for similar task (cifar vs SVHN)}
 
@@ -131,7 +134,8 @@ Take a tournament selection of 25 genomes containing 24 identical paths and one 
 
 The same reason influence the final step of the tournament search. When the limit of a hundred generations is reached, all paths in the population is evaluated again. Since the true fitness of a path might change from one generation to the next, only the paths participating in the final tournament has its true fitness score as part of the selection of the optimal path. As with the evaluation step, the final fitness of a path is the reached classification accuracy of one training unit (50 mini-batches of 16 samples). Using an actual validation set for this step might yield better, or at least more accurate, fitnesses to use as a basis for path-selection, but that would significantly increase the run-time of an already time intensive experiment. 
 
-\section{Results}\label{exp2:results}
+\section{Results}
+\label{exp2:results}
 Due to the experimentation being time-consuming, each algorithm were run 10 times and logs were saved after each experimental run of each algorithm. The following plots have been separated in three groups based on subject: paths, search and training. 
 
 \subsection{Paths}
@@ -145,36 +149,36 @@ Also tested are the null-hypotheses that a algorithm A have the same distributio
 
 As a metric by itself, the capacity is influenced both by path-size and module reuse. All paths being equal, a high level of reuse for one algorithm would yield a significant difference in used capacity as the total number of used modules is reduced. As this is not observed we would expect the mean reuse for each algorithm to not contain significant differences.
 
-\begin{figure}[p!]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/Capacity_pr_generation.pdf}
+\begin{sidewaysfigure}[p!]
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/Capacity_pr_generation.pdf}
     \caption{The average number of used modules during the multi-task learning sequence. Each jump is caused by the saving of an optimal path and then starting a new search for a new task. }
     \label{fig:search.capacity}
-\end{figure}
+\end{sidewaysfigure}
 
-\begin{figure}[p!]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/Module_reuse_pr_generation.pdf}
+\begin{sidewaysfigure}[p!]
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/Module_reuse_pr_generation.pdf}
     \caption{The average module reuse during the multi-task learning sequence. Each jump is caused by the saving of an optimal path, and the next task having more locked modules to reuse. The first 100 generations does not have any previously learned knowledge to reuse.}
     \label{fig:search.reuse}
-\end{figure}
+\end{sidewaysfigure}
 
 Figure \ref{fig:search.capacity} underlines the MWW results as there is only a small visual difference in average capacity between the algorithms.  Figure \ref{fig:search.reuse} on the other hand contain escalating fluctuations in the mean reuse across each algorithm. While all are below the Monte-Carlo estimated reuse, the algorithms seem to affect the change in reuse within each search differently. Another round of MWW tests however disproves this (see table \ref{tab:exp2.reuseptable}) as no null-hypotheses could be rejected under the Bonferroni corrected \(\alpha\)-level.
 
 \subsection{Population Diversity}
 \ref{fig:search.hamming_diversity} visualizes the average population diversity for each algorithm for each task calculated with the pair-wise Hamming distance metric. As this metric is dependent on the size of population as well as the number of genes in a genotype, the value at one point in the generation is not depictive of anything, but instead, the overall trend of the measure indicates at what rate the algorithm converges. 
 
-\begin{figure}[p!]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/Average_population_diversity_reduced_hamming.pdf}
+\begin{sidewaysfigure}[p!]
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/Average_population_diversity_reduced_hamming.pdf}
     \caption{The average pairwise Hamming distance within each generation is used as a measure for population diversity. Each subplot (in order left to right) is each task in trained order.}
     \label{fig:search.hamming_diversity}
-\end{figure}
+\end{sidewaysfigure}
 
 When a generation is over and mutations of the tournament winner replace all losers, the population makes a large shift in diversity unless most of the tournament participants have a similar genome, at which point population have most likely converged. This is why all diversity plots (\ref{fig:search.hamming_diversity} and \ref{fig:search.frequency_diversity_unique}) contain rapid changes for sections of high tournament size, while algorithms 1a and 1c (also algorithm 2a for the first tasks, 2b for the later tasks) have more gradual changes. 
 
-\begin{figure}[p!]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/frequency_diversity_unique_path_count.pdf}
+\begin{sidewaysfigure}[p!]
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/frequency_diversity_unique_path_count.pdf}
     \caption{The number of unique paths within a population. Plotted for every task and every algorithm.}
     \label{fig:search.frequency_diversity_unique}
-\end{figure}
+\end{sidewaysfigure}
 
 Plots \ref{fig:search.hamming_diversity} and \ref{fig:search.frequency_diversity_unique} contain about the same information, and confirms the ordering of selection pressure is what was intended. The only difference worth mentioning is the one of algorithm 1a for the two plots. We would expect the frequency diversity to misrepresent tie diversity of a population as being higher than it actually is due to it counting small mutations as totally different genomes. Here we see frequency giving a smaller diversity than Hamming distance, which suggests Hamming distance is the one misrepresenting reality. 
 
@@ -183,18 +187,20 @@ Also note algorithms 2a and 2b. The convergence rate of these algorithms changes
 Grouping by convergence rate would indicate tournament sizes 10, 15, 20 and 25 are equal to each other and algorithm 3b. 3a is much the same as tournament size 5. 1a is slow but steadily converging and would most likely do so if the generation termination limit was increased, while 1c shows no such tendencies. 
 
 \subsection{Training}
-\begin{figure}[p!]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/Training_accuracy.pdf}
+
+\begin{sidewaysfigure}[p!]
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/Training_accuracy.pdf}
     \caption{Average training accuracy during search. The dotted lines is the average achieved validation accuracy for that task and that algorithm.}
     \label{fig:search.accuracy}
-\end{figure}
+\end{sidewaysfigure}
+
 As the training of each path is done during and controlled by the search, how the average training accuracy develops gives an indication of how quickly the algorithms are able to influence the overall PathNet to learn a task. As discussed in section \ref{exp2:implementation.search}, the act of training one tournament of genomes effect the previously evaluated fitness values. Because of this, the populations average fitness values would be a highly misleading metric to use and therefore what is plotted in figure \ref{fig:search.accuracy} is the average fitness score achieved within a each generations tournament. Also plotted is the mean validation accuracy reached for each algorithm. This validation score is only calculated after an optimal path have been found for each task, and can therefore not be viewed as a function of generation number. The validation accuracy is visualized separately as a box-plot in figure \ref{fig:search.validation}.
 
-\begin{figure}[p!]
-    \includegraphics[width=1.2\textwidth, center]{Chapters/4.Experiments/exp2/figures/validation_boxplot.pdf}
+\begin{sidewaysfigure}[p!]
+    \includegraphics[width=1.2\textwidth, center]{Chapters/4.Experiments/exp2/figures/large/validation_boxplot.pdf}
     \caption{Boxplot of validation accuracy reached for each task and each algorithm.}
     \label{fig:search.validation}
-\end{figure}
+\end{sidewaysfigure}
 
 Again, one MWW-test is run for every pair of algorithm for each task, this time to test the distributions of validation accuracies under the \(\alpha\)-level 0.0003968. Comparing this \(\alpha\) to results in tables in section \ref{appendix:ptable.accuracy}, some patterns emerge: 
 \begin{itemize}
@@ -204,11 +210,11 @@ Again, one MWW-test is run for every pair of algorithm for each task, this time 
     \item Dynamic tournament size: Algorithms 3a and 3b does not differ for any task, and are also similar to algorithm 1b for all tasks. They do seem to differ from the low tournament size algorithms for most tasks however, except task 3b. 
 \end{itemize}
 
-\begin{figure}[ht]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/Training_value.pdf}
+\begin{sidewaysfigure}[ht]
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/Training_value.pdf}
     \caption{The total amount of training in all optimal paths for each multi-task learning sequence plotted against the cumulative validation accuracy reached for that sequence. The circle size corresponds to the total number of used PathNet modules.}
     \label{fig:search.training_value}
-\end{figure}
+\end{sidewaysfigure}
 
 Training value figure \ref{fig:search.training_value} shows us much of the same as \ref{fig:search.validation}, the difference being the x-axis is the cumulative accuracy reached for all six tasks and the y-axis shows the total amount of training units for all optimal paths found. The circle radius for each trial is correlated to the total use of modules. 
 
