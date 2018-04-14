@@ -18,7 +18,7 @@ Keras\cite{keras} is a high-level Machine Learning API that has a generalized an
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{Chapters/3.Implementation/figures/pathnet_visualization.pdf}
-    \caption{Graph-visualization of a two optimal paths through a PathNet-structure created with GraphViz. This example is of a 3 layer PathNet with 10 modules in each layer. The first path (red) has a total of 6 modules and each module contain the number of training units that module have received. The second path (yellow) also use 6 modules, but reuse one module from the first path (second layer, fourth module from the top). Note that all modules not part of a path (gray) have undergone zero training because the weights have been reinitialized after finding the second path}
+    \caption[GraphViz example]{Graph-visualization of a two optimal paths through a PathNet-structure created with GraphViz. This example is of a 3 layer PathNet with 10 modules in each layer. The first path (red) has a total of 6 modules and each module contain the number of training units that module have received. The second path (yellow) also use 6 modules, but reuse one module from the first path (second layer, fourth module from the top). Note that all modules not part of a path (gray) have undergone zero training because the weights have been reinitialized after finding the second path}
     \label{fig:pathnetexample}
 \end{figure}
 
@@ -59,13 +59,14 @@ As mentioned in \ref{background:pn}, each task has its own task specific final l
 Utilizing the layer and task objects are the PathNet object. Through hard-coded static methods a initialized PathNet structure is created for each experimental run. These methods initializes all layers, modules and configurations needed to start training. The PathNet-object also contain functionality for generating random paths and Keras-models from a given path and task object. It also contains a training counter for each module and interface for updating this value. There is also some \textit{housekeeping} functionality such as saving and locking modules after search and a TensorFlow-session backend reset (see section \ref{implementation:problems}).
 
 \section{Search implementation}
-As with PathNet the search have a modular implementation for easy adaptability and reuse in all experiments. Based around a hyper-parameter dictionary, the search method use predetermined functions for different GA operations such as selection-schemes for winner selection or path mutation. 
+\label{implementation.search}
+As with PathNet the search have a modular implementation for easy adaptability and reuse in all experiments. Based around a hyper-parameter dictionary, the search method use predetermined functions for different GA operations such as selection-schemes for winner selection or path mutation. The selection-schemes used is winner-replace-all where a mutation of the winner replace all other genomes in the tournament, and a 3-to-2 scheme where the two winners of a tournament size of 3 are recombined and the offspring replace the tournament looser.
 
 Every generation updates a Reprint-structure that gives terminal output of the search progress (see figure \ref{fig:searchoutput} for screen capture of a experimental run).
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.6\textwidth]{Chapters/3.Implementation/figures/search_output.png}
-    \caption{Screen shot of terminal output during a search. The top section contains hyper-parameters for this search as well as current generation number. Under neath the current population-state can be seen as well as some accuracies in the right margin. For these, \big[ \big] means the accuracy is outdated by training, \big< \big> means the value within is a training accuracy, .... means the path is not evaluated yet, and a plain percentage is the actual fitness of that path. At the bottom the current generations selection pressure as well as selection scheme is printed. }
+    \caption[Terminal search output]{Screen shot of terminal output during a search. The top section contains hyper-parameters for this search as well as current generation number. Under neath the current population-state can be seen as well as some accuracies in the right margin. For these, \big[ \big] means the accuracy is outdated by training, \big< \big> means the value within is a training accuracy, .... means the path is not evaluated yet, and a plain percentage is the actual fitness of that path. At the bottom the current generations selection pressure as well as selection scheme is printed. }
     \label{fig:searchoutput}
 \end{figure}
 \textbf{Edit note: Need more?}
@@ -103,7 +104,7 @@ One of the most commonly used data sets for image classification is the MNIST\ci
 \begin{figure}[p!]
     \centering
     \includegraphics[width=0.8\textwidth]{Chapters/3.Implementation/figures/MNIST.pdf}
-    \caption{Nine images from the MNIST data set.}
+    \caption[MNIST example]{Nine images from the MNIST data set.}
     \label{fig:mnist}
 \end{figure}
 
@@ -116,7 +117,7 @@ The Street View House Number\cite{SVHN} data set is real world images from Googl
 \begin{figure}[p!]
     \centering
     \includegraphics[width=0.8\textwidth]{Chapters/3.Implementation/figures/cSVHN.pdf}
-    \caption{Nine images from the cSVHN data set.}
+    \caption[cSVHN example]{Nine images from the cSVHN data set.}
     \label{fig:csvhn}
 \end{figure}
 

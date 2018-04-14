@@ -10,7 +10,7 @@ In machine learning, the fields of statistics, mathematics and data analysis are
 \begin{figure}[ht] 
 \centering
 \includegraphics[width=0.7\linewidth]{Chapters/2.Background/figures/artificial_neuron.png}
-\caption{Visualization of a artificial neuron. Each input \(x_{i}\) is multiplied with a corresponding trainable weight \(W_{i}\) before the products are all summed together with a bias \(b\). The resulting value is then passed through a activation function \(F\)}
+\caption[Visualization of a artificial neuron]{Visualization of a artificial neuron. Each input \(x_{i}\) is multiplied with a corresponding trainable weight \(W_{i}\) before the products are all summed together with a bias \(b\). The resulting value is then passed through a activation function \(F\)}
 \label{fig:artificialneuron}
 \end{figure}
 
@@ -33,7 +33,7 @@ The final softmax layer outputs an estimated probability for each label given so
 \begin{figure}[ht] 
     \centering
     \includegraphics[width=\linewidth]{Chapters/2.Background/figures/convolution.pdf}
-    \caption{Illustration of convolutional operation. The teal matrix contain convolutional parameters. These are element-wise multiplied by the overlapping (yellow) pixels in the image (blue) and added together. The resulting value is placed in the corresponding location in the output feature map (purple). The convolutional operation is completed by sliding or \textit{striding} the yellow window across the original image.}
+    \caption[Illustration of convolutional operation.]{Illustration of convolutional operation. The teal matrix contain convolutional parameters. These are element-wise multiplied by the overlapping (yellow) pixels in the image (blue) and added together. The resulting value is placed in the corresponding location in the output feature map (purple). The convolutional operation is completed by sliding or \textit{striding} the yellow window across the original image.}
     \label{fig:conv}
 \end{figure}
 To remedy this problem, image classification usually contain convolutional layers which are invariant to scale, rotation or translation. In a convolutional layer, a \textit{kernel} of trainable weights are convolved with the input image. This results in what is called a feature map, where the image size is reduced by some number of pixels\footnote{In some cases we would want to keep the image dimensions, in which case the input image can be padded to keep its original form.} depending on the size of the kernel, but the depth of the image (number of channels) is increased, the intent being each feature map contains more abstract information than the previous one. 
@@ -45,7 +45,7 @@ Networks consisting of multiple layers of convolution is called convolutional Ne
 \begin{figure}[ht] 
     \centering
     \includegraphics[width=0.8\linewidth]{Chapters/2.Background/figures/NNvsDNN.pdf}
-    \caption{Figure visualizes the difference between traditional Neural Networks and Deep Neural Networks. Artificial neurons (\textit{green}) are fully connected in both cases, and an activation layer (\textit{purple}) is set after every two layers. Where classical NN depends on being provided with high order features, the DNN performs its own feature extraction in its first layers.}
+    \caption[NN vs DNN]{Figure visualizes the difference between traditional Neural Networks and Deep Neural Networks. Artificial neurons (\textit{green}) are fully connected in both cases, and an activation layer (\textit{purple}) is set after every two layers. Where classical NN depends on being provided with high order features, the DNN performs its own feature extraction in its first layers.}
     \label{fig:NNvsDNN}
 \end{figure}
 
@@ -62,7 +62,7 @@ Usually when talking about CNNs, the line is crossed into what is described as D
         \includegraphics[width=\linewidth]{Chapters/2.Background/figures/segmentation.png}
         \caption{Segmented image}
     \end{subfigure}
-    \caption{Example of image segmentation. Original image have been segmented into three classes: \textit{sky}(blue), \textit{ground}(teal) and \textit{building}(pink). The three boxes in the original image is pixels used as training data for each class.}
+    \caption[Image segmentation]{Example of image segmentation. Original image have been segmented into three classes: \textit{sky}(blue), \textit{ground}(teal) and \textit{building}(pink). The three boxes in the original image is pixels used as training data for each class.}
     \label{fig:semanticsegmentation}
 \end{figure}
 
@@ -92,7 +92,7 @@ Traditionally, transfer learning has been applied in three ways:
 \begin{figure}[h] 
     \centering
     \includegraphics[width=\linewidth]{Chapters/2.Background/figures/transfer_experiment.png}
-    \caption{Illustration provided by Yosinski et al. in their paper\cite{yosinski2014transferable} in figure 1 to visualize their experimental process. The top two models A (green) and B (purple) are trained first on data A and data B. The labeled rectangles represents each layer in the networks, i.e. \(W_{A_{1}}\) is the weights in layer 1 in model A and the ellipsoids between each layer represents activation layers. The color of the stack of circles to the left of each model shows which partition of the data set each model is trained on(again A is green and B is purple). The bottom two rows show the first three layers from A and B being transferred to new randomly initialized models. In the paper they showed they found better accuracy in model A3B than every other model in this figure, even B3B.}
+    \caption[Transfer learning experiment]{Illustration provided by Yosinski et al. in their paper\cite{yosinski2014transferable} in figure 1 to visualize their experimental process. The top two models A (green) and B (purple) are trained first on data A and data B. The labeled rectangles represents each layer in the networks, i.e. \(W_{A_{1}}\) is the weights in layer 1 in model A and the ellipsoids between each layer represents activation layers. The color of the stack of circles to the left of each model shows which partition of the data set each model is trained on(again A is green and B is purple). The bottom two rows show the first three layers from A and B being transferred to new randomly initialized models. In the paper they showed they found better accuracy in model A3B than every other model in this figure, even B3B.}
     \label{fig:transferexperiment}
 \end{figure}
 
@@ -110,7 +110,7 @@ A problem that arises in systems where parameters is trained on multiple sequent
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\linewidth]{Chapters/2.Background/figures/EWC.pdf}
-    \caption{Figure from the paper on reducing catastrophic forgetting\cite{ewc}. The figure shows the parameter space \(\mathcal{P}\) and hypothetical areas of low error for two tasks A and B. The arrows indicate the direction EWC \textit{red} and normal training \textit{purple} takes the parameters.}
+    \caption[Elastic Weight Consolidation]{Figure from the paper on reducing catastrophic forgetting\cite{ewc}. The figure shows the parameter space \(\mathcal{P}\) and hypothetical areas of low error for two tasks A and B. The arrows indicate the direction EWC \textit{red} and normal training \textit{purple} takes the parameters.}
     \label{fig:ewc}
 \end{figure}
 
@@ -124,7 +124,7 @@ Rusu et al. published a paper in September of 2016\cite{progressiveneuralnetwork
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{Chapters/2.Background/figures/ProgressiveNeuralNet.pdf}
-    \caption{Example of a PNN. \textit{Left}: a three-layer NN is trained on task A. \textit{Right}: Adding another stack of three hidden layers that are being trained on task B. The weights in the first stack trained on A is now locked to the back propagation from task B, but its weights may be used is shown by arrows between the layers. Green indicates layer is open to back propagation, red indicates it is locked. Note that injection of a layer from a older task is not possible as lateral connections are only \textit{to} the new layer. The figure is a simplification of multiple figures from the article\cite{progressiveneuralnetworks}}
+    \caption[Progressive Neural Network]{Example of a PNN. \textit{Left}: a three-layer NN is trained on task A. \textit{Right}: Adding another stack of three hidden layers that are being trained on task B. The weights in the first stack trained on A is now locked to the back propagation from task B, but its weights may be used is shown by arrows between the layers. Green indicates layer is open to back propagation, red indicates it is locked. Note that injection of a layer from a older task is not possible as lateral connections are only \textit{to} the new layer. The figure is a simplification of multiple figures from the article\cite{progressiveneuralnetworks}}
     \label{fig:pnn}
 \end{figure}
 After training a DNN on a task A\footnote{In the paper, the PNN is focused as an application for Reinforcement tasks where the PNN were trained to provide probabilities over actions from a set of possible actions, from an input state.}, a new DNN were initialized with lateral connections (see fig. \ref{fig:pnn}) to the NN trained on task A and then trained on task B with back propagation only done through the newly initialized layers. This ensures that the new DNN can optimize freely on task B, but will be able to utilize the weights trained on task A, without catastrophic forgetting occurring in the first DNN. When a sufficient performance on task B is reached, the PNN is able to perform optimally on both tasks, given some selection of the output (i.e: if given data for a task within the domain A, the output from the weights trained on task B is not optimal). Multiple tasks can be trained using this method. For each new task, a new DNN is initialized and the other DNNs in the PNN is connected laterally to each new layer. 
@@ -155,7 +155,7 @@ To keep the population size from shrinking, some recombination of the existing g
         \includegraphics[width=\linewidth]{Chapters/2.Background/figures/tournamentsearch_flowchart.pdf}
         %\caption{Tournament Search}
     \end{subfigure}
-    \caption{Flowcharts of the general Genetic Algorithm (left) and Tournament Search (right). The color blue indicates the operation is standard in a GA, while purple is special to a tournament search}
+    \caption[Algorithm flowcharts]{Flowcharts of the general Genetic Algorithm (left) and Tournament Search (right). The color blue indicates the operation is standard in a GA, while purple is special to a tournament search}
     \label{fig:algorithmflowcharts}
 \end{figure}
 
@@ -224,7 +224,7 @@ Using a combination of evolutionary and machine learning techniques, PathNet sha
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{Chapters/2.Background/figures/PathNet.pdf}
-    \caption{Figure shows a PathNet implementation with 3 layers of 8 modules (NNs) in each layer. The \textit{red} color indicates the weights of this NN is locked to back propagation, while \textit{green} indicates it is open. \textit{Blue} cells are reduced-sum modules which summarizes the features between each layer. The purple connections show a path through the network. One path may use multiple modules from each layer, and may contain both locked and open modules.}
+    \caption[PathNet structure]{Figure shows a PathNet implementation with 3 layers of 8 modules (NNs) in each layer. The \textit{red} color indicates the weights of this NN is locked to back propagation, while \textit{green} indicates it is open. \textit{Blue} cells are reduced-sum modules which summarizes the features between each layer. The purple connections show a path through the network. One path may use multiple modules from each layer, and may contain both locked and open modules.}
     \label{fig:pathnet}
 \end{figure}
 
@@ -235,8 +235,8 @@ Each task applied to PathNet is designated its own unique end-layer added to eve
 
 A \textit{path} is the name given a subset of the modules in a PathNet structure, where the path may contain between 1 and \(\omega\) modules from each layer, where \(\omega\) is adjusted to control the amount of capacity (number of weights) allocated to a path (solution). Each module in this path is locked after training is completed. This locking of the modules is to prevent the weights in the modules from changing if they are reused by subsequent tasks, and this preventative measure is what ensue catastrophic forgetting does not occur in this structure. After a optimal paths modules are locked, the rest of the modules that are not used in any path and does not contain optimized weights for a task is reinitialized. Fernando et al. claims\cite{pathnet} that this re-initialization is because they were not able to reach results that outperformed fine-tuning without it.
 
-\subsection{Search}
-For every new task introduced to the PathNet, a tournament search algorithm is initialized to find a optimal path through the network. A population of pathways (e.g: subsets of modules) are randomly initialized, and applied a tournament search with a tournament size of 2 and probability \(p=1\) of selecting the winner (as per equation \ref{eq:tournamentsearch}), making this tournament implementation deterministic. Every fitness evaluation of the tournament contenders is done by training them each a set amount and using the negative loss as a fitness value. The training amount is quite small at 50 batches of 16 examples each. This means that evaluating the fitness of a path changes the performance of that path, unless all modules in that path is locked to backpropagation.
+\subsection{Search}\label{background:pathnet.search}
+For every new task introduced to the PathNet, a tournament search algorithm is initialized to find a optimal path through the network. A population of pathways (e.g: subsets of modules) are randomly initialized, and applied a tournament search with a tournament size of 2 and probability \(p=1\) of selecting the winner (as per equation \ref{eq:tournamentsearch}), making this tournament implementation deterministic. Every fitness evaluation of the tournament contenders is done by training them each a set amount and using the negative loss as a fitness value. One \textit{training unit} is quite small at 50 batches of 16 examples each. This means that evaluating the fitness of a path changes the performance of that path, unless all modules in that path is locked to backpropagation.
 
 When a winner is selected, the genome of the winner is duplicated to replace the looser and then mutated by each module in the path having a probability \(\frac{1}{L\omega}\) of being replaced with a neighbouring module\footnote{A module with index \(i\) is replaced with a module of index between \(i-2\) and \(i+2\)}, where L is the number of layers, and \(\omega\) is as mentioned the max number of active modules in each layer. The rather large mutation rate ensures that the average path, even if it contains the maximum number of modules, would have a genome change to separate it from the winner. Over multiple generations, however, the population converges to a lower diversity state where more and more paths contain similar modules. The search is terminated under some criteria, either a reached threshold fitness or a generation limit. 
 \textbf{Edit note: More about pathnet needed? implementation details? Discussion about the experiments done in \cite{pathnet}?}

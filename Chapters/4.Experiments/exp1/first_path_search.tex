@@ -22,56 +22,52 @@ It is also the same data used for the initial experiment performed on PathNet by
 
 I performed two experiments of this type. First, a binary classification scenario where I selected four classes from the ten available in the MNIST set and split them into two groups of two classes as task A and task B. The second experiment was a quinary classification scenario where all 10 classes were used in two groups of five each. The reason for the second experiment is discussed in the result section of experiment one. 
 
-\section{Implementation}\label{exp1:implementation}
+\section{Hyperparameters}
+\label{exp1:implementation}
 The implementation of PathNet has already been described in a preceding section of this thesis, so only the hyper-parameters used in the experiment will be discussed here. A list of hyper-parameters can be found in table \ref{tab:exp1.hyperparam}
 
 \input{Chapters/4.Experiments/exp1/tables/hyperparameter_table}
 
-\subsection{Binary MNIST classification}
+\section{Binary MNIST classification}
+\label{exp1:results.binary}
+
+\subsection{Experimental setup}
 A similar PathNet structure to the MNIST experiment in the original PathNet paper is used here. 
 Three layers with a maximum of three active modules from a total of 10, each with 10 fully connected nodes followed by ReLU-activation. Since each data point in MNIST is a 28 by 28 grey scale picture, the matrix of input-values is first flattened to a 784-element vector before it is used in training. The digits 3 and 4 were selected as task A, and digits 1 and 2 as task B. 
 During the search, a population of 64 paths were used, and the search halted when a training accuracy of 98\% was reached, or after 500 generations. During tests, searches that exceeded 500 generations usually persisted for more than 1000 generations because the training was stuck in a local-minima. The population had always converged to one path at that point, and excessive training on a converged path would after a while approximate end-to-end training. Because of this and limitations to available experimentation time, the limit of 500 generations is enforced. The task-specific classification layer that is used alongside the PathNet weights is obviously restricted by the training scenario and its use, so it consists of two fully connected nodes followed by Softmax-activation for the purpose of classification.
 A total of 600 experimental runs were performed.
 
-\subsection{Quinary MNIST classification}
-A different PathNet structure was implemented here. The first two layers consisted of 10 convolutional modules each, where a convolutional module contained two convolutional layers, the first with a 3 by 3 kernel and ReLU activation, and the second with a 5 by 5 kernel and ReLU activation. Following these convolutions, a Batch-Normalization layer is added to reduce the spread in gradients. The third and last PathNet-layer were 10 modules of 20 fully connected nodes and another ReLU activation. To connect the second and third layer, a two-dimensional Maxpooling reduced the dimensionality of the second layers output before the 2D matrix was flattened to a vector.   
-
-The path searches were again done with a population of 64 paths and a limitation of 500 generations, but the threshold training accuracy used here were 97.5\% to limit run time. 
-Since the classification task here were quinary and all 10 classes from the MNIST set were used, for simplicity's sake, task A consisted of digits 0 through 4, and digits 5 through 9 made up task B. 
-
-This experiment was considerably more computationally expensive to run, so it was programmed to keep running until no more time could be dedicated to this experiment. In the end, this ended up being 535 experiments. 
-
-
-\section{Binary MNIST classification}
-\label{exp1:results.binary}
 
 \subsection{Results}
 \label{exp1:BIN.results}
 \begin{figure}[t]
     \includegraphics[width=\textwidth]{Chapters/4.Experiments/exp1/figures/BIN_module_reuse_bargraph.pdf}
-    \caption{Distribution of module reuse in S+S and P+S searches alongside expected module reuse for random selection of modules in first and second task[green]. This plot is a result of 600 experimental runs.}
+    \caption[Module reuse for binary MNIST classification]{Distribution of module reuse in S+S and P+S searches alongside expected module reuse for random selection of modules in first and second task[green]. This plot is a result of 600 experimental runs.}
     \label{fig:binMNIST.hist}
 \end{figure}
 
 The amount of module reuse between the two tasks is visualized in three plots in terms of frequency, training and layer-distribution.
 
-Figure \ref{fig:binMNIST.hist} shows a bar graph of how the amount of trial are distributed on the different amounts of reuse achieved. Compared to the S+S and P+S training schemes, the expected distribution of trials for random module selection is plotted in green. No difference between S+S and P+S for any of the reuse amount is observed here, however, the amount of trials where zero reuse were found is significantly higher than expected from random module selection. 
+Figure \ref{fig:binMNIST.hist} shows a bar graph of how the amount of trial are distributed on the different amounts of reuse achieved. Compared to the S+S and P+S training schemes, the expected distribution of trials for random module selection is plotted in green. No difference between S+S and P+S for any of the reuse amount is observed here, however, the amount of trials where zero reuse were found is significantly higher than expected from random module selection. Performing a Mann-Whitney rank-sum test for the two groups of module reuse show not significant difference between selecting the first path arbitrarily or searching for it with tournament search. 
 
 \begin{figure}[t]
     \includegraphics[width=\textwidth]{Chapters/4.Experiments/exp1/figures/BIN_training_boxplot.pdf}
-    \caption{Box-plot depicting average amount of training each module within a path gets for each group of module reuse for both P+S and S+S. Note that as the module reuse increase, the number of observations in each group decrease. Figure \ref{fig:binMNIST.hist} visualize the difference in group size.}
+    \caption[Training boxplot for binary MNIST classification]{Box-plot depicting average amount of training each module within a path gets for each group of module reuse for both P+S and S+S. Note that as the module reuse increase, the number of observations in each group decrease. Figure \ref{fig:binMNIST.hist} visualize the difference in group size.}
     \label{fig:binMNIST.box}
 \end{figure}
 
 The average amount of training units\footnote{Each module in a path undergoes one unit of training when that path is evaluated once during a search. In this case that means 50 mini-batches of size 16.} each module in the optimal path found for task B is plotted against reuse in figure \ref{fig:binMNIST.box}. It is clear here that paths with a higher amount of reuse also have a higher amount of average training when the first path have arbitrarily been selected. The S+S scheme on the other hand, does not seem to have any significant change in average training across the different reuse groups. 
 
+A series of Mann-Whitney tests for each group of reuse found in figure \ref{fig:binMNIST.box} shows there is no difference in average training units for zero reuse between S+S and P+S, while the difference for 1 module reuse and higher is statistically significant under a Bonferroni corrected significance level of \(\frac{0.05}{4}=0.0125\).
+
 \begin{figure}[t]
     \includegraphics[width=\textwidth]{Chapters/4.Experiments/exp1/figures/BIN_reuse_by_layer.pdf}
-    \caption{This plot shows how the total amount of reuse in all experiments are distributed on the three layers in the PathNet structure }
+    \caption[Reuse by layer for binary MNIST classification]{This plot shows how the total amount of reuse in all experiments are distributed on the three layers in the PathNet structure }
     \label{fig:binMNIST.layer_reuse}
 \end{figure}
  
 The total amount of reuse found across all experimental trials are split into which layer they occur in for figure \ref{fig:binMNIST.layer_reuse}. While the difference between S+S and P+S is small, the difference between layers is quite prominent. The first layer contain significantly less of the total reuse amount at about 10-15\%. The rest of the reuse are about evenly split on the last two layers, making the distribution quite uneven. 
+
 
 \subsection{Discussion}
 \label{exp1:BIN.discussion}
@@ -95,31 +91,41 @@ Since this implementation is one of fully connected nodes, each neuron has to ge
 Point 4 because the modules are changed from NNs to CNNs, and 1 through 3 because we increase the task difficulty and therefore also the necessary training time. 
 
 \section{Quinary MNIST classification}
+\subsection{Experimental setup}
+A different PathNet structure was implemented here. The first two layers consisted of 10 convolutional modules each, where a convolutional module contained two convolutional layers, the first with a 3 by 3 kernel and ReLU activation, and the second with a 5 by 5 kernel and ReLU activation. Following these convolutions, a Batch-Normalization layer is added to reduce the spread in gradients. The third and last PathNet-layer were 10 modules of 20 fully connected nodes and another ReLU activation. To connect the second and third layer, a two-dimensional Maxpooling reduced the dimensionality of the second layers output before the 2D matrix was flattened to a vector.   
+
+The path searches were again done with a population of 64 paths and a limitation of 500 generations, but the threshold training accuracy used here were 97.5\% to limit run time. 
+Since the classification task here were quinary and all 10 classes from the MNIST set were used, for simplicity's sake, task A consisted of digits 0 through 4, and digits 5 through 9 made up task B. 
+
+This experiment was considerably more computationally expensive to run, so it was programmed to keep running until no more time could be dedicated to this experiment. In the end, this ended up being 535 experiments. 
+
+\subsection{Results}
 \label{exp1:results.quinary}
 Each of figures in section \ref{exp1:BIN.results} have their Quinary MNIST counterpart here, but included in these plots are a version of the S+S scheme called S+S flipped\footnote{In S+S, task A consisted of classifying the classes \{0, 1, 2, 3, 4\} while task B were classes \{5, 6, 7, 8, 9\}}, where the task order have been reversed.
 
-\subsection{Results}
 \begin{figure}[t]
     \includegraphics[width=\textwidth]{Chapters/4.Experiments/exp1/figures/QUIN_module_reuse.pdf}
-    \caption{Frequency histogram equivalent to \ref{fig:binMNIST.hist} for the Quinary MNIST classification experiment. The red bar shows reuse in a training scenario similar to S+S, but where the order of tasks is reversed.}
+    \caption[Module reuse for quinary MNIST classification]{Frequency histogram equivalent to \ref{fig:binMNIST.hist} for the Quinary MNIST classification experiment. The red bar shows reuse in a training scenario similar to S+S, but where the order of tasks is reversed.}
     \label{fig:quinMNIST.hist}
 \end{figure}
 
 \begin{figure}[t]
     \includegraphics[width=\textwidth]{Chapters/4.Experiments/exp1/figures/QUIN_training_boxplot.pdf}
-    \caption{Average training box-plot equivalent to \ref{fig:binMNIST.box} except for the addition of a training scenario similar to S+S but where the task order is reversed. Note that as the module reuse increase, the number of observations in each group decrease. Figure \ref{fig:quiMNIST.hist} visualize the difference in group size.}
+    \caption[Training boxplot for quinary MNIST classification]{Average training box-plot equivalent to \ref{fig:binMNIST.box} except for the addition of a training scenario similar to S+S but where the task order is reversed. Note that as the module reuse increase, the number of observations in each group decrease. Figure \ref{fig:quiMNIST.hist} visualize the difference in group size.}
     \label{fig:quinMNIST.box}
 \end{figure}
 
 \begin{figure}[t]
     \includegraphics[width=\textwidth]{Chapters/4.Experiments/exp1/figures/QUIN_reuse_by_layer.pdf}
-    \caption{Frequency of module reuse for each layer in the paths. Equivalent to \ref{fig:binMNIST.layer_reuse} except for the addition of a training scenario similar to S+S but where the task order is reversed}
+    \caption[Reuse by layer for quinary MNIST classification]{Frequency of module reuse for each layer in the paths. Equivalent to \ref{fig:binMNIST.layer_reuse} except for the addition of a training scenario similar to S+S but where the task order is reversed}
     \label{fig:quinMNIST.layer_reuse}
 \end{figure}
 
-It is quickly eminent from figures \ref{fig:quinMNIST.hist} and \ref{fig:quinMNIST.box} that the increase in task difficulty between binary MNIST and quinary MNIST have uncovered effects predicted in the original hypothesis. In the bar graph \ref{fig:quinMNIST.hist}, a clear difference between P+S and S+S is visible. This difference is even more prominent for S+S flipped, but as these trials have a different task order and the information contained in task B might be harder or easier to generalize, the comparison between S+S flipped and P+S is not entirely fair. 
+It is quickly eminent from figures \ref{fig:quinMNIST.hist} and \ref{fig:quinMNIST.box} that the increase in task difficulty between binary MNIST and quinary MNIST have uncovered effects predicted in the original hypothesis. In the bar graph \ref{fig:quinMNIST.hist}, a clear difference between P+S and S+S is visible and confirmed with Mann-Whitney testing. This difference is even more prominent for S+S flipped, but as these trials have a different task order and the information contained in task B might be harder or easier to generalize, the comparison between S+S flipped and P+S is not entirely fair. 
 
 The difference between S+S and P+S in figure \ref{fig:binMNIST.box} are not present in figure \ref{fig:quinMNIST.box}. Instead a downward trend in average training for paths with a higher reuse have emerged. To test why this is, S+S flipped have been introduced and paths learning task B first have a trend where average training increase for a higher amount of reuse. Over-all, the training for paths trained in S+S flipped is also significantly lower for all levels of reuse. Note also that the amount of training for S+S and P+S have increase from the binary MNIST classification which is to be expected due to the increase in task difficulty. 
+
+Performing Mann-Whitney tests of S+S and P+S for the different reuse groups provides no rejected null-hypotheses proving there is no significant difference in average training between selecting and searching for the first path. Testing the difference between S+S and S+S flipped shows a significant difference for all groups but that of 4 module reuse. 
 
 Figure \ref{fig:quinMNIST.layer_reuse} shows the uneven distribution across layers in figure \ref{fig:binMNIST.layer_reuse} is gone. For S+S flipped, the most amount of reuse is found in the two first layers.
 
