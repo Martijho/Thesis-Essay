@@ -44,6 +44,7 @@ We will calculate the expected reuse distribution based on the Monte-Carlo estim
 Learning from the conclusion in chapter \ref{exp2}, the algorithms maximum tournament size is reduced from 25 to 10.
 
 \section{Results}
+
 \subsection{Population Diversity}
 \begin{figure}[h!]
     \includegraphics[width=\textwidth, center]{Chapters/4.Experiments/exp3/figures/diversity_hamming.pdf}
@@ -56,9 +57,9 @@ Learning from the conclusion in chapter \ref{exp2}, the algorithms maximum tourn
     \label{fig:exp3.frequency}
 \end{figure}
 
-As the algorithms run here are the same as in chapter \ref{exp2}, the convergence rates are quite similar to figures \ref{fig:exp3.hamming} and \ref{fig:exp3:frequency}. However, the searches are run for 250 generations, which makes the diversity drop in algorithms with slow convergence, such as 1a and 1c, become apparent. 
+As the algorithms that run here are the same as in chapter \ref{exp2}, the convergence rates are quite similar to figures \ref{fig:exp3.hamming} and \ref{fig:exp3:frequency}. However, the searches are run for 250 generations, which makes the diversity drop in algorithms with slow convergence, such as 1a and 1c, become apparent. 
 
-Noteworthy about these diversity plots is that algorithm 1c in both cases converge more within the 250 generations for task 2 than task 1. Testing the null-hypothesis that the final generations population have a similar pair-wise Hamming distance for task 1 than task 2 gives a p-value of 0.00229 for a one-sided Mann-Whitney test. Confirming the observation is not due to a outlier in the data, but rather a difference in the diversity distributions. 
+Noteworthy about these diversity plots is that algorithm 1c in both cases converge more within the 250 generations for task 2 than task 1. Testing the null-hypothesis that the final generations population have a similar pair-wise Hamming distance for task 1 than task 2 gives a p-value of 0.00229 for a one-sided Mann-Whitney test. Confirming the observation is not due to a outlier in the data, but rather a difference in the diversity distributions. The only other algorithms that change their convergence between task 1 and task 2 are algorithms 2a and 2b for obvious reasons.  
 
 \subsection{Modular reuse}
 \begin{sidewaysfigure}[p!]
@@ -75,6 +76,11 @@ Noteworthy about these diversity plots is that algorithm 1c in both cases conver
 Figure \ref{fig:exp3.reuseprogression} show the average reuse for each algorithm changing during the searches with different termination limit. Algorithms with high reuse for the second task (1b and 2b) reach the highest level of reuse within the first 30 generations, whereupon it start to drop. Algorithms using a low tournament size instead gradually increase in reuse, where it looks to surpass the other algorithms around 100 generations.  
 
 The box-plot in figure \ref{fig:exp3.reuseboxplot} show the reuse in the optimal paths selected for task 2. The searches are stopped at different points, but there does not look to be any striking differences in any of the groups of reuse. They do all, however, seem to score higher than the expected reuse from random modules selection. 
+
+When performing MWW testing to compare the algorithm results to that of random module selection, we do not want to run multiple test like in chapter \ref{exp2}, as the Bonferroni correction to the \(\alpha\) level would most likely cause none of the null-hypotheses to be rejected due to the number of tests we need to perform. Instead MWW-test where the reuse groups for each algorithm is added together are compared to the estimated reuse for such a group if modules were selected randomly. The p-values for all four generation limit are on the order of \(10^{-4}\) which makes all the null-hypotheses rejected and the difference significant. 
+
+Another set of MWW-tests were run to check the difference in reuse for the different generation limits. These tests concluded with the only significant difference between generation limits being that of 250 and 100, where a generation limit of 100 generations gave a significantly higher distribution of module reuse. A full table of the p-values can be found in table \ref{tab:ptable.generationlimit}.
+
 \subsection{Path fitness}
 \begin{sidewaysfigure}[h]
     \includegraphics[width=1.25\textwidth, center]{Chapters/4.Experiments/exp3/figures/fitness_progression.pdf}
@@ -82,9 +88,26 @@ The box-plot in figure \ref{fig:exp3.reuseboxplot} show the reuse in the optimal
     \label{fig:exp3.fitness}
 \end{sidewaysfigure}
 
+\begin{sidewaysfigure}[h]
+    \includegraphics[width=1.25\textwidth, center]{Chapters/4.Experiments/exp3/figures/fitness_by_evaluations.pdf}
+    \caption[Average tournament fitness plotted by evaluation]{The average tournament fitness as it changes with respect to number of evaluations for the first 800 evaluations.}
+    \label{fig:exp3.fitness_by_evaluations}
+\end{sidewaysfigure}
+
 Figure \ref{fig:exp3.fitness} show the average tournament fitness for each generation. As with results in chapter \ref{exp2}, the algorithms with high tournament size plateau in fitness quicker than algorithms with a low tournament size.
 
-Noteworthy features of this plot is the increase in average fitness for algorithms with low tournament size in the start of each search from task 1 to task 2, suggesting the learning is easier the second time around. 
+Noteworthy features of this plot are the increase in average fitness for algorithms with low tournament size in the start of each search from task 1 to task 2, suggesting the learning for these algorithms are easier the second time around. 
+
+The plot in figure \ref{fig:exp3.fitness_by_evaluations} show the same progress in average tournament fitness, but here plotted by evaluation number and not generation. This figure shows us the increase in average fitness from task 1 to task 2 is not only for the low tournament size algorithms. 
 
 \section{Discussion}
+As we expected from these relearning experiments, the level of modular reuse between tasks were higher than in chapter \ref{exp2}. Some of the increase is due to the smaller PathNet structure and permutation-space of modules, but as the MWW-tests for algorithm groups in figure \ref{fig:exp3.reuseboxplot} showed, the reuse these algorithms caused are significantly higher than that caused by random module selection. This tells us there are some incentive to reuse knowledge from task 1 in task 2.
+
+Due to the different convergence rates, the reuse was expected to have different distributions for the different generation limits. The MWW-tests and p-values in table \ref{tab:ptable.generationlimit} shows us this is true for the searches limited at 250 and 100 where there shorter search time yielded more reuse. 
+
+The only difference between task 1 and task 2 is that task 2 searches among modules where some contain with pre-trained parameters. The figures \ref{fig:exp3.fitness} and \ref{fig:exp3.fitness_by_evaluations} confirm then that reusing locked modules improves training as the average fitness of a tournament grows quicker for task 2. One can only assume this effect would get more prominent for a more complex task-domain where generalization is difficult and reusing knowledge becomes more valuable.   
+
 \section{Conclusion}
+These experiments did not provide any conclusive evidence for which selection pressure scheme that optimized module reuse, as there were not shown any difference between the algorithms. However, as hypothesized, they did reach a higher module reuse than that of a random module selection. 
+
+The paths that had some knowledge to reuse did perform better than those who optimized newly trained parameters. This confirms the benefit to PathNet is present also here. 
