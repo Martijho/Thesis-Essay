@@ -5,24 +5,24 @@ Improvements in computation and algorithms have since then taken machine learnin
 \section{Machine Learning}
 \label{background:ML}
  
-In machine learning, the fields of statistics, mathematics, and data analysis are combined and applied to automatic modeling of data. Its three main sub-fields, supervised, unsupervised and reinforcement learning covers a vast number of structures and techniques. However, this thesis will focus on the flag-ship of machine learning, the artificial neural network,  set it in a supervised learning scenario where it is applied to a classification problem.
+In machine learning, the fields of statistics, mathematics, and data analysis are combined and applied to automatic modeling of data. Its three main sub-fields, supervised, unsupervised and reinforcement learning covers a vast number of structures and techniques. This thesis will focus on the flag-ship of machine learning, the artificial neural network,  set it in a supervised learning scenario where it is applied to a classification problem.
 
 \begin{figure}[ht] 
 \centering
 \includegraphics[width=0.7\linewidth]{Chapters/2.Background/figures/artificial_neuron.png}
-\caption[Visualization of a artificial neuron]{Visualization of a artificial neuron. Each input \(x_{i}\) is multiplied with a corresponding trainable weight \(W_{i}\) before the products are all summed together with a bias \(b\). The resulting value is then passed through a activation function \(F\)}
+\caption[Visualization of a artificial neuron]{Visualization of a artificial neuron with 3 inputs. Each input \(x_{i}\) is multiplied with a corresponding trainable weight \(W_{i}\) before the products are all summed together with a bias \(b\). The resulting value is then passed through a activation function \(F\)}
 \label{fig:artificialneuron}
 \end{figure}
 
-Supervised learning is a way to teach some machine learning system patterns in annotated data. In a dataset \(\left [X, Y \right] \), each data-point \(x_{i}\) corresponds to a label or ground truth \(y_{i}\). In the context of an Artificial Neural Network, each \(x_{i}\) is fed through the network and fitted against the target \(y_{i}\) using some optimization algorithm. 
+Supervised learning is a way to teach some machine learning system patterns in annotated data. In a dataset \(\left [X, Y \right] \), each data-point \(x_{i}\) corresponds to a label or ground truth \(y_{i}\). In the context of an \textit{Artificial Neural Network} (ANN), each \(x_{i}\) is fed through the network and fitted against the target \(y_{i}\) using some optimization algorithm. 
 
-Inspired by the structure of the brain, the \textit{Artificial Neural Network} or \textit{Neural Network} (NN) consists of layers of artificial neurons like the one visualized in figure \ref{fig:artificialneuron}. Each neuron has a number \(n\) of inputs \(x_{i}\) where each input is scaled by a tunable parameter or \textit{weight} \(w_{i}\) and summed together including a bias \(b\) before it is passed through a activation function \(F\).
+Inspired by the structure of the brain, the ANN or \textit{Neural Network} (NN) consists of layers of artificial neurons like the one visualized in figure \ref{fig:artificialneuron}. Each neuron has a number \(n\) of inputs \(x_{i}\) where each input is scaled by a tunable \textit{parameter} or \textit{weight} \(w_{i}\) and summed together including a bias \(b\) before it is passed through a activation function \(F\).
 
 \begin{equation}
     F(\sum_{i=1}^{n}W_{i}x_{i} + b) = output
 \end{equation}
 
-Two of the most commonly used activation functions are the rectified linear unit function (ReLU) and the softmax function, which is the generalization of binary logistic regression to multiple classes. ReLU merely evaluates to the maximum of neuron output and 0, which sets zero if the output is negative and keeps positive outputs. Softmax, on the other hand, approximates a probability by scaling the output of a set of neurons to have a sum between 0 and 1 and are used in classification. These two activation functions will play a role in the later experiments (see \ref{exp1:implementation} and \ref{exp2:implementation}) in this thesis, where softmax will be used as the final activation layer to be the basis of classification. ReLU is used as activation function throughout the rest of the neural networks. 
+Two of the most commonly used activation functions are the rectified linear unit function (ReLU) and the softmax function, which is the generalization of binary logistic regression to multiple classes. ReLU merely evaluates to the maximum of neuron output and 0, which sets zero if the output is negative and keeps positive outputs. Softmax, on the other hand, approximates a probability by scaling the output of a set of neurons to have a sum between 0 and 1 and are used in classification. These two activation functions will play a role in the later experiments (see \ref{exp1:implementation},\ref{exp2:implementation}, and \ref{exp3:implementation}) in this thesis, where softmax will be used as the final activation layer to be the basis of classification. ReLU is used as activation function throughout the rest of the neural networks. 
 
 These types of systems \textit{learn} to approximate a function based on the data provided to the network. Each data point x consist of multiple features (\(x_{i}\)'s), which is fed through one or more layers of neurons that output a prediction \(\hat{y}_{i}\). This prediction is then compared to the ground truth with a loss function\footnote{Also called cost function, error function or objective function} which calculates the difference between expected output \(y_{i}\) and observed output \(\hat{y}_{i}\).
 For this thesis, the loss function used is cross-entropy which is well suited for classification with softmax activation\cite{softmaxcrossentropy}.
@@ -31,14 +31,14 @@ The goal of the training is to minimize the loss function for a given data set. 
 
 The function approximation properties of neural networks are used as a regression tool in data analysis and prediction, reward signal estimation for reinforcement learning among other areas, but is as mentioned, applied to classification in this thesis.
 
-The final softmax layer outputs an estimated probability for each label given some input where the label given highest probability is selected as the model's prediction. As long as the input features to the network is correlated to the label in some way and there is enough training data, the neural network will adapt to the patterns in input features and learn one or more classification rules. In the case of an image classifier, the network is provided with the raw pixel values in the image. A normal, fully connected neural network\footnote{Also called affine, or dense networks.} is badly suited for this type of classification since attributes in images often change location or scale in the images \ref{exp1:implementation}. E.g., a picture of a dog is still a picture of a dog if the image is rotated upside down, rescaled, or framed differently. To account for all these cases, the dataset used would have to contain enough examples of all these variations.
+The final softmax layer outputs an estimated probability for each label given some input where the label given highest probability is selected as the model's prediction. As long as the input features to the network is correlated to the label in some way and there is enough training data, the neural network will adapt to the patterns in input features and learn one or more classification rules. In the case of an image classifier, the network is provided with the raw pixel values in the image. A normal, fully connected neural network\footnote{Also called affine, or dense networks.} is badly suited for this type of classification since attributes in images often change location or scale. E.g., a picture of a dog is still a picture of a dog if the image is rotated upside down, rescaled, or framed differently. To account for all these cases, the dataset used would have to contain enough examples of all these variations.
 \begin{figure}[ht] 
     \centering
     \includegraphics[width=\linewidth]{Chapters/2.Background/figures/convolution.pdf}
-    \caption[Illustration of convolutional operation.]{Illustration of convolutional operation. The teal matrix contains convolutional parameters. These are element-wise multiplied by the overlapping (yellow) pixels in the image (blue) and added together. The resulting value is placed in the corresponding location in the output feature map (purple). The convolutional operation is completed by sliding or \textit{striding} the yellow window across the original image.}
+    \caption[Illustration of convolutional operation.]{Illustration of convolutional operation. The teal matrix(Kernel) contains convolutional parameters. These are element-wise multiplied by the overlapping (yellow) pixels in the image (blue matrix) and added together. The resulting value is placed in the corresponding location in the output feature map (purple). The convolutional operation is completed by sliding or \textit{striding} the yellow window across the original image.}
     \label{fig:conv}
 \end{figure}
-To remedy this, image classifiers usually contains convolutional layers which are invariant to scale, rotation or translation. In a convolutional layer, a \textit{kernel} of trainable weights are convolved with the input image. This results in what is called a feature map, where the image size is reduced by some number of pixels\footnote{In some cases we would want to keep the image dimensions, in which case the input image can be padded to keep its original form.} depending on the size of the kernel. However, the depth of the image is increased, the intent is to raise the level of abstraction in the feature map for each convolutional layer. 
+To remedy this, image classifiers usually contains convolutional layers which are invariant to scale, rotation or translation. In a convolutional layer, a \textit{kernel} of trainable weights are convolved with the input image. This results in what is called a feature map, where the image size is reduced by some number of pixels\footnote{In some cases we would want to keep the image dimensions. In such cases the input image can be padded to keep its original form.} depending on the size of the kernel. However, the depth of the image is increased, the intent is to raise the level of abstraction in the feature map for each convolutional layer. 
 
 In a convolutional operation, a kernel is slid across an image, and for every overlap between the kernel and a image section, the kernel weights are multiplied with its corresponding pixel and summed (see \ref{fig:conv}). As with fully connected layers, the operations performed in each step is multiplication and summation, but here, each pixel in the output feature map contains some spatial information.
 This spatial area covered by each feature can be controlled by the kernel size and how much the kernel is moved (called stride) between each kernel multiplication.
@@ -46,7 +46,7 @@ Networks consisting of multiple layers of convolution is called Convolutional Ne
 
 \begin{figure}[ht] 
     \centering
-    \includegraphics[width=0.8\linewidth]{Chapters/2.Background/figures/NNvsDNN.pdf}
+    \includegraphics[width=\linewidth]{Chapters/2.Background/figures/NNvsDNN.pdf}
     \caption[NN vs DNN]{Figure visualizes the difference between traditional Neural Networks and Deep Neural Networks. Artificial neurons (\textit{green}) are fully connected in both cases, and an activation layer (\textit{purple}) is set after every two layers. Where classical NN depends on being provided with high order features, the DNN performs its own feature extraction in its first layers.}
     \label{fig:NNvsDNN}
 \end{figure}
@@ -55,12 +55,12 @@ Networks consisting of multiple layers of convolution is called Convolutional Ne
 Usually, when talking about CNNs, the line is crossed into Deep Learning. In each layer of convolution, the spatial size is reduced while the number of channels increases. This means the information processed in step gradually shifts from a spatially encoded "image" to an encoding in feature space, making a CNN capable of turning raw image input into a higher order feature representation. That is why deep Convolutional Neural Networks can be said to be performing feature extraction on its own.
 
 \begin{figure}
-    \begin{subfigure}[h]{0.49\linewidth}
+    \begin{subfigure}[ht]{0.49\linewidth}
         \includegraphics[width=\linewidth]{Chapters/2.Background/figures/original.png}
         \caption{Original image}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[h]{0.49\linewidth}
+    \begin{subfigure}[ht]{0.49\linewidth}
         \includegraphics[width=\linewidth]{Chapters/2.Background/figures/segmentation.png}
         \caption{Segmented image}
     \end{subfigure}
@@ -91,7 +91,7 @@ Traditionally, transfer learning has been applied in three ways:
 \end{enumerate}
 
 
-\begin{figure}[h] 
+\begin{figure}[ht] 
     \centering
     \includegraphics[width=\linewidth]{Chapters/2.Background/figures/transfer_experiment.png}
     \caption[Transfer learning experiment]{Illustration provided by Yosinski et al. in their paper\cite{yosinski2014transferable} in figure 1 to visualize their experimental process. The top two models, A (green) and B (purple), are trained first on data A then data B. The labeled rectangles represents each layer in the networks, i.e., \(W_{A_{1}}\) is the weights in layer 1 in model A, and the ellipsoids between each layer represents activation layers. The color of the stack of circles to the left of each model shows which partition of the dataset each model is trained on. The bottom two rows show the first three layers from A and B being transferred to new randomly initialized models. \cite{yosinski2014transferable} showed better accuracy in model A3B than every other model in this figure, even B3B.}
@@ -102,7 +102,7 @@ In a study by Yosinski et al. \cite{yosinski2014transferable}, results showed tr
 
 An additional training step, consisting of finetuning the first layers by allowing backpropagation through them, was done on data from subset B. The visualization of this in figure \ref{fig:transferexperiment} is a reconstruction of a figure in the original paper for a case with \(n=3\). The goal was to study the effects transferring had on accuracy when transferring layers from one classification case to another. 
 
-The best results reached were achieved when training a model on subset A, transferring the first three layers to a new randomly initialized model and fine-tuning these transferred layers while using subset B to train those newly formed. This confirmed their expectation that the earlier layers in an image classifier learn to approximate Gabor-filters which are highly generalized. In section \ref{exp1:results} we see tendencies to this behavior. 
+The best results reached were achieved when training a model on subset A, transferring the first three layers to a new randomly initialized model and fine-tuning these transferred layers while using subset B to train those newly formed. This confirmed their expectation that the earlier layers in an image classifier learn to approximate Gabor-filters which are highly generalized. In section \ref{exp1:results.quinary} we see tendencies to this behavior. 
 
 \subsection{Multi-task Learning}
 Multi-task Learning and Transfer Learning both have the same ideology of sharing some parameter state between tasks to positively influence learning. Where Transfer Learning does not concern itself with performance on a seed task, multi-task learning tries to optimize parameters for multiple tasks. The most common ways of achieving this are by \textit{soft parameter sharing} and \textit{hard parameter sharing}. While both techniques have some weights unique to each task, \textit{hard parameter sharing} optimize the same parameters for all tasks. This is shown to reduce overfitting\cite{hardparametersharing} significantly. As the weights change values to optimize for a changing target, they never overly adapt to the training set. \textit{Soft parameter sharing} on the other hand have separate parameters for each task, but lateral connections between each tasks layers to minimize the distance between the parameters trained for each task.
@@ -114,7 +114,7 @@ Both humans and animals learn better when examples provided are ordered and grad
 \label{background:catastrophicforgetting}
 A problem that arises in systems where parameters are trained on multiple sequential tasks is what is called \textit{catastrophic forgetting}. Not discussed by Yosinski, but set in a transfer learning scenario, this effect manifests itself as moving parameters away from an area of low error for a previously trained task. This movement could, for instance, be because the parameters are fine-tuned for a new task. While the performance for the second task increase, performance for the first task decrease because the \textit{knowledge is forgotten} when the weights are re-adapted to the new data. This is not a problem in a scenario where the source task is considered a stepping stone to reach good performance for the target task, but might be if all tasks trained on are of the same importance.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\linewidth]{Chapters/2.Background/figures/EWC.pdf}
     \caption[Elastic Weight Consolidation]{Figure from the paper on reducing catastrophic forgetting\cite{ewc}. The figure shows the parameter space \(\mathcal{P}\) and hypothetical areas of low error for two tasks A and B. The arrows indicate the direction EWC \textit{red} and normal training \textit{purple} takes the parameters.}
@@ -129,7 +129,7 @@ Using EWC, Kirkpatrick et al.\cite{ewc} was able to train the same NN on ten dif
 
 \subsection{Progressive Neural Networks}
 Rusu et al. published a paper in September of 2016\cite{progressiveneuralnetworks} where they addressed the problem of catastrophic forgetting during transfer learning with fine-tuning. Their proposed solution, Progressive Neural Networks (PNN) were shown to be able to learn multiple tasks sequentially without overwriting the previously trained weights. This was done by horizontally scaling the DNN with a new stack of layers for each new task.
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{Chapters/2.Background/figures/ProgressiveNeuralNet.pdf}
     \caption[Progressive Neural Network]{Example of a PNN. \textit{Left}: a three-layer NN is trained on task A. \textit{Right}: Adding another stack of three hidden layers that are being trained on task B. The weights in the first stack trained on A is now locked to the back propagation from task B, but its weights may still be used (shown by arrows between the layers). Green indicates layer is open to backpropagation, red indicates it is locked. Note that injection of a layer from an older task is not possible as lateral connections are only \textit{to} the new layer. The figure is a simplification of multiple figures from the article\cite{progressiveneuralnetworks}}
@@ -150,16 +150,18 @@ When a population is ranked by its fitness, different selection schemes can be a
 
 A commonly used way of ordering and discussing genetic algorithms is by the properties \textit{exploration} and \textit{exploitation}. A search with high exploration tries to keep a diverse population where many possible solution types are evaluated to find an area in solution space with high fitness. On the other hand, algorithms with high exploitation will usually find the locally best solution. A way of achieving this is by keeping a uniform population with only small differences in the genomes.
 
+Another property of a genetic search is its \textit{selection pressure} which describes how much a generations best solution is favored. Having a high selection pressure translates to the best solution having a strong influence on the total population in the next generation, while a minimum selection pressure would cause the search to ignore fitness-rank and arbitrarily select genomes for survival or recombination.
+
 Some recombination of genomes is usually performed with a \textit{crossover} algorithm to keep the population size from shrinking each generation.  The crossover function takes a set of \textit{parent} genomes and outputs a set of offspring with the goal of controlling the population size.  Typically, a child genome is then mutated under some probability to further maintain genetic diversity. This mutation applies some small genome change.
 
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
-    \begin{subfigure}[h]{0.25\linewidth}
+    \begin{subfigure}[ht]{0.25\linewidth}
         \includegraphics[width=\linewidth]{Chapters/2.Background/figures/ga_flowchart.pdf}
         %\caption{Genetic Algorithm}
     \end{subfigure}
     \hspace{0.25\textwidth}
-    \begin{subfigure}[h]{0.25\linewidth}
+    \begin{subfigure}[ht]{0.25\linewidth}
         \includegraphics[width=\linewidth]{Chapters/2.Background/figures/tournamentsearch_flowchart.pdf}
         %\caption{Tournament Search}
     \end{subfigure}
@@ -177,7 +179,7 @@ where \(i\) is the fitness-ranking achieved during the tournament (1 being first
 
 In the search implementation used in the experiments in this thesis (see \ref{exp1:implementation}, \ref{exp2:implementation}, and \ref{exp3:implementation}), a version of the tournament search is used. For every generation, a subset of the total population, given by the tournament size, is selected and evaluated. The winner then replaces each of the other contestants, making this implementation what is called a \textit{Deterministic Tournament Selection}, e.g., \(p=1\). Before the winner and its duplicate(s) are inserted back into the population, each copy of the winner is mutated under some probability to keep the diversity. 
 
-A benefit of the tournament search, except for its efficiency in implementing and ability to work in parallel architectures, is that the \textit{selection pressure} of the search can easily be adjusted(see \ref{exp2:algorithms}). By increasing the tournament size, the winner of the tournament influence the future generations more.
+A benefit of the tournament search, except for its efficiency in implementing and ability to work in parallel architectures, is that the \textit{selection pressure} of the search can easily be adjusted(see \ref{exp2:description}). By increasing the tournament size, the winner of the tournament influence the future generations more.
 
 \subsection{Population Diversity}
 \label{background:diversity}
@@ -229,7 +231,7 @@ In the experiments in chapter \ref{exp2}, both frequency diversity and Hamming d
 In 2017, DeepMind took the modular approach\footnote{Modular with respect to the traditional approaches of transfer from monolithic models} to deep transfer learning for multi-task systems one step further with their newly developed Super Neural Network structure\footnote{A Super Neural Network is a meta-network where each node in the network is itself a Neural Network.}; \textit{PathNet}\cite{pathnet}. Where Progressive Neural Networks transfer knowledge between domains by adding a new uninitialized DNN for each task, the size of PathNet is not dynamic in the number of parameters. At training start, the net consists of randomly initialized weights in multiple DNNs, where each DNN is considered a module (or node) in a larger PathNet structure. 
 
 Using a combination of evolutionary and machine learning techniques, PathNet shares the PNNs traits of being able to optimize for multiple training tasks without catastrophic forgetting and transfer knowledge between tasks by reusing weights locked to backpropagation.  
-\begin{figure}[h]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{Chapters/2.Background/figures/PathNet.pdf}
     \caption[PathNet structure]{Figure shows a PathNet implementation with 3 layers of 8 modules (NNs) in each layer. The \textit{red} color indicates the weights of this NN is locked to back propagation, while \textit{green} indicates it is open. \textit{Blue} cells are reduced-sum modules which summarizes the features between each layer. The purple connections show a path through the network. One path may use multiple modules from each layer, and may contain both locked and open modules.}

@@ -1,4 +1,87 @@
-\chapter{Discussion}
+\chapter{Thesis Conclusion}
+
+\section{Experimentation summary}
+\subsection{Experiment 1: Selection versus search}
+The first results using binary MNIST tasks turned out to be too simple. When the task difficulty was increased, and the module structure changed from fully connected neurons to convolutional operations, both searches cause the same amount of training in the selected path. This uncovered that the end-to-end training of the first path caused less reuse than when the first path was found by searching. As the search termination here was a threshold accuracy, the equal training amount of both end-to-end training and full path search tells us the problems with end-to-end training in a modular structure lies in the modules transferability, and not accuracy performance.
+
+\subsection{Experiment 2: Selection pressure}
+The different selection pressures influenced training predictably. The increase in tournament size, and therefore also the number of evaluations per generation, yielded more training, quicker convergence to a path, and each generation provided a larger increase in fitness. No difference in reuse was found, and all algorithms reused less than would have been done if all modules were selected randomly. 
+
+\subsection{Experiment 3: Relearning a task}
+Training under ideal reuse conditions did cause more reuse than by random module selection for all algorithms. However, there were only minor differences between the algorithms and no distinct patterns in reuse among the different training amounts or tournament sizes. 
+
+The availability of trained modules to reuse caused a more rapid increase in fitness for the first generations for the second task than the first.  
+
+\section{Discussion}
+As experienced in chapter \ref{exp1}, the selected problems domain-complexity has a large influence on how the PathNet behaves during training. The advantage to module reuse and modular training was not as prominent as expected. However, there are some claims that can be made to some degree of certainty.
+
+\begin{itemize}
+    \item \emph{The transferability of modules is effected by the context in which the modules are trained}
+\end{itemize}
+The experiments in chapter \ref{exp1} provided evidence for this by concluding to end-to-end training causing more parameters less well suited for module reuse. This insight colored the expectation for results in chapter \ref{exp2} and \ref{exp3}. The expectations based on chapter \ref{exp1} was that modules trained as part of multiple paths would have a higher likelihood of being reused. Larger tournament sizes was hypothesized to provide a higher selection pressure than small tournament sizes, and end-to-end training could be classified as having the highest possible selection pressure. Therefore, the lower tournament size algorithms (mainly 1a and 1c) were expected to have a higher level of module reuse than the rest of the algorithms. Neither the results in chapter \ref{exp2}, nor chapter \ref{exp3} show evidence for this being the case. Further experimentation is needed to uncover if this holds true for a more complex task domain. 
+
+During the experimentation in chapter \ref{exp2} the results for diversity and validation accuracy yielded another insight: 
+\begin{itemize}
+    \item \emph{There is a diminishing return in the exploitation of a search when increasing the tournament size}
+\end{itemize}
+This motivated another set of experimental trials for algorithms 3a and 3b as the tournament sizes above 10 having a comparable convergence. Mann-Whitney testing the difference between this new maximum tournament size and the old one of 25 for both algorithms confirmed that there was no significant difference.
+
+When performing the last experiments in chapter \ref{exp3}, this new maximum tournament size was used for all algorithms utilizing a high tournament size. The ideal circumstances gave an overall higher module reuse level than the preceding experiment, but the different selection pressures did not perform significantly different from each other. However, confirmation of PathNet's merits was found in this chapter. 
+
+\begin{itemize}
+    \item \emph{Higher reuse of modules when the source and target task domain is similar yield quicker training.}
+\end{itemize}
+While this is merely a validation of the results DeepMind found in \cite{pathnet}, the results for module reuse hint at the task domain being too simple which makes the performance increase from reusing modules surprising. 
+
+Reaching results from which we can draw strongly supported insights about whether exploration does provide better transferability of knowledge requires these experiments to be tested with more complex tasks. We can assume that demanding more from the network structure regarding capacity would require a larger PathNet structure and adjustments made to the search termination limits. In such a case, each evaluation would provide a smaller fitness increase, and more focus might be placed on finding better parameters currently in the PathNet-state. 
+
+\section{Future work}
+This thesis lay foundations which need to be built on to reach a more in-depth understanding of transferability of parameters in a modular context. During the work, multiple unanswered questions appeared which is presented here as possible future work. 
+
+\subsection{More complex task-domain}
+As mentioned, the behavior of high exploration and high exploitation search algorithms might be different when using a more complex task-set. For binary MNIST classification in chapter \ref{exp1}, the expected decrease in reuse for end-to-end training was not present due to the task-domain being too simple. This might also be the reason why none of the algorithms used in chapter \ref{exp2} or \ref{exp3} caused different levels of reuse. For instance, training paths to provide reinforcement signals for different locomotion tasks provides an intuitive divide between problems as the different tasks could be different environments through which the agent moves.   
+
+\subsection{Module optimization with other search algorithms}
+The use of tournament search for optimal module selection only scratches the surface of possible algorithm choices. The use of evolutionary search methods might provide a better exploration of module permutation-space, and cause different effects on performance. 
+
+\subsection{Saturating a PathNet}
+As PathNet by design is restricted in the number of parameters, at some point, all modules are locked to backpropagation. Each subsequent problem applied to the structure would consist of only reused modules, and the only parameter optimization would be that of the task-unique final layer. Such a saturated PathNet structure might lead to a high abstraction level output from the final module layer, and new tasks could be learned using little training data and only a small amount of new capacity. 
+
+It would be necessary for such a scenario too, device a proficient search algorithm which both provides good module choices during the saturation process and good choices after new modules are unable to be trained. 
+
+\subsection{Convergence increase when reusing modules}
+The reason behind algorithm 1c's increased convergence for task 2 in chapter \ref{exp3} is not understood. The experiment should be replicated to check if the result is consistent, and investigating the reason behind this effect. 
+
+
+
+\iffalse
+Future work on the topics in this thesis should include such an increase in task difficulty and module structure. As these experiments only start to explore the possibilities in genetic algorithms for path optimization, multiple possible techniques could be used. In the name of minimizing the amount of capacity used for each task through module reuse, exploring the properties of a saturated PathNet might prove interesting. As the amount of open and available untrained parameters diminish, the importance of effective and appropriate path-optimization would surpass the significance of parameter optimization. 
+
+While the object-oriented implementation of PathNet and its path search worked well in these experiments, an increase in computational requirements would justify the effort of creating a GPU implementation of the search algorithm. 
+
+
+
+- How did we interpret the results?
+- What did we learn?
+- What questions did we answer?
+- did we answer all original research questions?
+
+- What did we not answer? 
+* Why did we not?
+* How could this be answered?
+
+\section{Future works}
+- How did this implementation work?
+* what worked well?
+* What could be better?
+
+- Which experiments would be a natrual continuation of this work?
+* What would they answer?
+* why are these different from what I did?
+
+
+
+
 Are your results satisfactory? 
 Can they be improved? 
 Is there a need for improvement? 
@@ -16,6 +99,4 @@ Consequences of the achieved results, for example for new research, theory and a
 
 \subsection{Common errors}
 The conclusions are too far reaching with respect to the achieved results; the conclusions do not correspond with the purpose
-
-
-- Further exploration of PathNets learning properties should be done with a more computational resources. Such a large structure with multiple levels of computationally intensive operations have a higher limitation to hardware than run-of-the-mill Machine Learning does, which already is some of the more hard computationally heavy optimization problems to attempt.
+\fi

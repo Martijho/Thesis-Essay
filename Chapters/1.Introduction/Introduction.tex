@@ -1,20 +1,43 @@
 \chapter{Introduction}
 
-Biology and nature have always been imitated in art and the sciences, but over the years the imitations are growing increasingly better. Artificial Intelligence and its sub-field of Machine Learning is one of these areas. While Machine Learning are a valuable tool in itself, the ultimate goal of AI is to build what is referred to as \textit{Artificial General Intelligence}: A system capable of not only human-level performance in one field but able to generalize across domains and teach itself multiple new skills. 
+Biology and nature have always been imitated in art and the sciences, but over the years the imitations are growing increasingly better. Artificial Intelligence (AI) and its sub-field of Machine Learning is one of these areas. While Machine Learning is a valuable tool in itself, the ultimate goal of AI is to build what is referred to as \textit{Artificial General Intelligence}: A system capable of not only human-level performance in one field but able to generalize across task-domains and teach itself multiple new skills. 
 
-As we again draw upon nature for inspiration and insights into how such a system might be constructed, the brains capability of learning new skills based on old ones is one ability is seem necessary our future  artificial minds have. Who of us can recall something they learned that were learned without any previous knowledge to base it on? Before children learn to multiply, they learn how to add. The time before that is spent counting fingers. Even riding a bike requires a level of balance and understanding of locomotion developed much earlier.
+As we again draw upon nature for inspiration and insights into how such a system might be constructed, the brains capability of learning new skills based on old ones is one ability it seems necessary our future artificial minds possess. Who of us can recall something they learned that was without any previous knowledge to base it on? Before children learn to multiply, they learn how to add. The time before that is spent counting fingers. Even riding a bike requires a level of balance and understanding of locomotion developed in infancy.
+
+The walnut-shaped learning machine inside our skulls consists of billions of neurons. These transmit information in the form of energy through a vast network of synaptic connections and causes all forms of brain activity from contemplation to fight-or-flight responses. Drawing upon the structure of this cell, the Artificial Neuron was constructed in an attempt to model and imitate the learning ability of the human mind. Where the stimulation of a neuron causes it to activate and pass on the stimuli through its \textit{axeon}, the artificial neuron is fed numbers through its inputs. These are processed arithmetically and output through its artificial synapses. Structuring these artificial neurons in a network, where the output of one neuron is fed as input to other, creates a \textit{Artificial Neural Network}\footnote{Often just called Neural Network or NN.} (ANN). 
+
+The learning in such an ANN is achieved by every input to an artificial neuron being weighted by a tunable parameter, and these parameters were optimized in such a way that the output of the entire network has the smallest error possible. This way of representing knowledge in parametric space has proved itself quite useful for problem-solving, but the troubles arise when applying the artificial neural network to multiple problems at the same time.
 
 \section{Motivation}
-Our brains are capable of learning something based on previous knowledge without distorting that reused knowledge. This distortion, as discussed in section \ref{background:catastrophicforgetting}, is called catastrophic forgetting and is a problem addressed and to some degree solved by technologies such as EWC\cite{ewc}, PNNs\cite{progressiveneuralnetworks} and the PathNet structure\cite{pathnet}. These introduce the ability to retain parameters optimized for task while a new task is introduced. 
+Our brains are capable of learning something based on previous knowledge without distorting that reused knowledge. A standard Artificial Neural Networks, on the other hand, would have to change its parameters to learn a task, which distorts the state they were already in. This distortion, as discussed in section \ref{background:catastrophicforgetting}, is called \textit{catastrophic forgetting}. Most existing solutions to this problem follow one of two motivations: 
+\begin{itemize}
+    \item Optimizing the parameters of a network to multiple problems, where the network occupy an area in parameter-space of low error for all problems. 
+    \item Training problems sequentially while introducing new capacity to a network for each task, locking the previously optimized parameters from backpropagation. 
+\end{itemize}
 
-However, these three solutions have limitations. EWC optimize the same set of parameters to multiple tasks, which puts restrictions on which area in parameter-space the model can occupy. PNN and PathNet both are theoretically unlimited in the amount of tasks they can retain. In practice, however, restrictions in hardware and feasible training time governs the amount of tasks and parameters in these structures. 
+An example of the first method is Elastic Weight Consolidation\cite{ewc} (EWC). While effective for problems from the same domain, finding a set of parameters with a low error for multiple tasks can be quite hard and might lead to worse performance than what would be achievable with separate networks for each task.
 
-Optimizing the reuse of parameters between tasks can reduce the overall need for new capacity for each task. Efficiently applying old knowledge to new problems could therefore be a step towards creating vast multi-task learning systems. 
+Scaling the neural network with new capacity for each task, like the Progressive Neural Network\cite{progressiveneuralnetworks} (PNN), have no restrictions on the type of tasks applied to the network since each tasks parameters can occupy the most suitable parameter-space. By allowing the reuse of parameters previously optimized while not allowing them to change, each new problem might be solved by leaning on old experiences. However, the scaling of such a network can quickly create a large, unwieldy structure only usable with computationally capable machines. To ensure enough parameter resources for each new task, the amount of network capacity needed is usually overestimated, which only compound the problem. 
 
 \section{Goal}
-To investigate the possibilities of effective knowledge reuse, this thesis explores the PathNet structure. A Super Neural Network forgoes the monolithic architecture of traditional machine learning models in favour of a modular approach to parameter optimization. The three experiments will address how the modular training affects the transferability of knowledge between tasks and in what area of a exploration/exploitation landscape should a search algorithm focus.
+The focus of this thesis will be to introduce new insights into the reuse of knowledge in a modular learning scenario with the PathNet structure\cite{pathnet}. Like the PNN, PathNet allocates new parameters for each task, while allowing the unaltered reuse of previously trained parameters. Which sets of parameters that are allocated for each task is determined by a search through all permutations of trained and untrained modules of parameters. Finding an optimal module selection scheme would reduce the amount of new capacity needed for each task, and compact the total knowledge in a PathNet into a smaller subsection of parameters without compromises to performance. 
 
-\section{Outline}
+Addressing this goal, three experiments in chapter \ref{exp1}, \ref{exp2}, and \ref{exp3} raise questions about how the search for optimal parameter-permutations affect the reuse of those parameters and the performance of the permutation. Figure \ref{fig:research_questions} shows what types of questions are raised in each experiment, and how they are related to each other. 
+
+\begin{figure}[t]
+    \includegraphics[width=\textwidth]{Chapters/1.Introduction/figures/All_experiments.pdf}
+    \caption[Thesis questions]{Visualization of how the questions raised in this thesis is separated across the three experiments.}
+    \label{fig:research_questions}
+\end{figure}
+
+Chapter \ref{exp1} investigate the possibility of arbitrarily selecting the first set of parameters for end-to-end training, instead of performing a time-consuming search through randomly initialized weights. This might save time in future experiments as there is no knowledge to reuse when the first task is learning. However, the end-to-end training might affect the optimization of the selected weights and increase the difficulty of reusing them in future tasks. A more general statement of this goal is to test if different search types and parameter training contexts affect parameter \textit{reuse}. If the results from this experiment indicate that there is no difference in parameter reuse between the two training schemes for the first task, subsequent experiments will be performed using this arbitrarily selecting of the first parameter set. 
+
+Experiment two in chapter \ref{exp2} share the research goal of testing if different search schemes affect learning, but under a more extensive multi-task scenario with six tasks. The experiment explores how the knowledge reuse is affected by different search types, and if a search scheme can be selected to optimize this reuse. Seven algorithms are tried, where the \textit{selection pressure}(see section \ref{background:GA}) of each algorithm is different. 
+
+The last experiment in chapter \ref{exp3} deploy the same search algorithms used in chapter \ref{exp2} in a scenario optimal for knowledge reuse. By learning the same tasks two times, all the necessary knowledge for solving the second problem is present in the PathNet. As an ideal search algorithm should be able to find the best-suited parameters for each task, this scenario might unveil interesting differences between the algorithms. The seven algorithms are tried with four different termination limits to the search to investigate if the knowledge reuse follows other patterns at different points during the search. 
+
+
+\section{Thesis Outline}
 \subsubsection{Chapter 1. Introduction}
 Providing an introduction to the thesis as well as the motivation behind it.
 \subsubsection{Chapter 2. Theoretical Background}
@@ -26,9 +49,24 @@ The first experiment where module permutation is done in an empty PathNet struct
 \subsubsection{Chapter 5. Experiment 2: Selection pressure}
 Exploring search algorithms used for optimal module selection. Multiple searches are performed where the selection pressure of the search algorithms are different. 
 \subsubsection{Chapter 6. Experiment 3: Relearning a task}
-Searching for a optimal path through a PathNet to solve a task which the structure already knows. Testing if the different algorithms have search properties which provides better or worse knowledge reuse.
+Searching for an optimal path through a PathNet to solve a task which the structure already knows. Testing if the different algorithms have search properties which provide better or worse knowledge reuse.
 \subsubsection{Chapter 7. Discussion and conclusion}
-Discussing and concluding the over-all experimental results reached in this thesis. Possible future work is also mentioned. 
+Concluding the thesis is a summary of observations and conclusions drawn from the experiments.
+
+\iffalse
+
+\section{Motivation}
+Our brains are capable of learning something based on previous knowledge without distorting that reused knowledge. This distortion, as discussed in section \ref{background:catastrophicforgetting}, is called catastrophic forgetting and is a problem addressed and to some degree solved by technologies such as EWC\cite{ewc}, PNNs\cite{progressiveneuralnetworks} and the PathNet structure\cite{pathnet}. These introduce the ability to retain parameters optimized for a previously learned task while a new task is introduced. 
+
+However, these three solutions have limitations. EWC optimize the same set of parameters to multiple tasks, which puts restrictions on which area in parameter-space the model can occupy. PNN and PathNet both are theoretically unlimited in the number of tasks they can retain. In practice, however, restrictions on hardware and feasible training time governs the number of tasks and parameters in these structures. 
+
+Optimizing the reuse of parameters between tasks can reduce the overall need for new capacity for each task. Efficiently applying old knowledge to new problems could, therefore, be a step towards creating vast multi-task learning systems. 
+
+\section{Goal}
+To investigate the possibilities of effective knowledge reuse, this thesis explores the PathNet structure. A Super Neural Network which forgoes the monolithic architecture of traditional machine learning models in favor of a modular approach to parameter optimization. The three experiments will address how the modular training affects the transferability of knowledge between tasks and in what area of the exploration/exploitation landscape a search algorithm should be focused.
+\fi
+
+
 
 
 
