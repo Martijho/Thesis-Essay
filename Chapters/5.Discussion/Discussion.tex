@@ -1,4 +1,4 @@
-\chapter{Thesis Conclusion}
+\chapter{Discussion and Conclusion}
 
 \section{Experimentation summary}
 \subsection{Experiment 1: Selection versus search}
@@ -35,21 +35,24 @@ While this is merely a validation of the results DeepMind found in \cite{pathnet
 
 Reaching results from which we can draw strongly supported insights about whether exploration does provide better transferability of knowledge requires these experiments to be tested with more complex tasks. We can assume that demanding more from the network structure regarding capacity would require a larger PathNet structure and adjustments made to the search termination limits. In such a case, each evaluation would provide a smaller fitness increase, and more focus might be placed on finding better parameters currently in the PathNet-state. 
 
-\section{Future work}
-This thesis lay foundations which need to be built on to reach a more in-depth understanding of transferability of parameters in a modular context. During the work, multiple unanswered questions appeared which is presented here as possible future work. 
+\section{Conclusion and future work}
+This thesis provide evidence for searches, extreme in either exploration or exploitation, having different influences on learning. We saw end-to-end training, the traditional way of performing Machine Learning, not being as well suited for knowledge transfer as a more modular approach. Multiple sub-models trained and competing against each other for more training time causes each module to be moved through parameter space to an area with low error for more than one model. This is shown to be beneficial for future tasks as these modules are easier to adapt to. More detailed tuning of selection pressure did not provide the similar results, and we were unable either confirm or disprove the different tournament sizes affecting transfer of knowledge between tasks
 
-\subsection{More complex task-domain}
+\subsection{Future work}
+Building on the foundation laid with this work could provide a more in-depth understanding of transferability of knowledge in a modular context. During this work, multiple unanswered questions appeared which is presented here as possible future work. 
+
+\subsubsection{More complex task-domain}
 As mentioned, the behavior of high exploration and high exploitation search algorithms might be different when using a more complex task-set. For binary MNIST classification in chapter \ref{exp1}, the expected decrease in reuse for end-to-end training was not present due to the task-domain being too simple. This might also be the reason why none of the algorithms used in chapter \ref{exp2} or \ref{exp3} caused different levels of reuse. For instance, training paths to provide reinforcement signals for different locomotion tasks provides an intuitive divide between problems as the different tasks could be different environments through which the agent moves.   
 
-\subsection{Module optimization with other search algorithms}
+\subsubsection{Module optimization with other search algorithms}
 The use of tournament search for optimal module selection only scratches the surface of possible algorithm choices. The use of evolutionary search methods might provide a better exploration of module permutation-space, and cause different effects on performance. 
 
-\subsection{Saturating a PathNet}
+\subsubsection{Saturating a PathNet}
 As PathNet by design is restricted in the number of parameters, at some point, all modules are locked to backpropagation. Each subsequent problem applied to the structure would consist of only reused modules, and the only parameter optimization would be that of the task-unique final layer. Such a saturated PathNet structure might lead to a high abstraction level output from the final module layer, and new tasks could be learned using little training data and only a small amount of new capacity. 
 
 It would be necessary for such a scenario too, device a proficient search algorithm which both provides good module choices during the saturation process and good choices after new modules are unable to be trained. 
 
-\subsection{Convergence increase when reusing modules}
+\subsubsection{Convergence increase when reusing modules}
 The reason behind algorithm 1c's increased convergence for task 2 in chapter \ref{exp3} is not understood. The experiment should be replicated to check if the result is consistent, and investigating the reason behind this effect. 
 
 

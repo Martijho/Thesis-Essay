@@ -41,20 +41,20 @@ As mentioned in \ref{Implementation:SVHN} there are two formats to the SVHN set,
 
 For both the MNIST and cSVHN set, the amount of training data have been limited to 10000 training samples and 4000 validation samples. Of these samples, MNIST have a fairly even distribution on each class while SVHN have an imbalance in the class distribution. Since the samples used are randomly selected before each experimental run, the probability of selecting one sample from a given class can be derived from the total amount of samples in that class (see \ref{Implementation:SVHN} for the exact number of samples in each class).
 
-Each experimental run will apply a searching scheme to find an optimal path in a gradually increasing knowledge base within a PathNet. This means, for instance, tasks 1a always will be learned in a module-set of only initialized weights and no previous knowledge. 
+Each experimental run will apply a searching scheme to find an optimal path in a gradually increasing knowledge base within a PathNet. This means, for instance, tasks 1a will always be learned in a module-set of only initialized weights and no previous knowledge. 
 \begin{enumerate}
-    \item Constant selection pressure
+    \item Constant selection pressure for all tasks:
     \begin{enumerate}
         \item Tournament size 2
         \item Tournament size 25
         \item Tournament size 3 + recombination
     \end{enumerate}
-    \item Scaling selection pressure
+    \item Tournament size changing between searches:
     \begin{enumerate}
         \item Low to high pressure: 2, 5, 10, 15, 20, 25
         \item High to low pressure: 25, 20, 15, 10, 5, 2
     \end{enumerate}
-    \item Dynamic selection pressure
+    \item Tournament size changing during searches:
     \begin{enumerate}
         \item Gradual change from 2 to 25 during each search
         \item Gradual change from 25 to 2 
@@ -78,7 +78,7 @@ Algorithms 3a and 3b have its selection pressure changed during each tournament 
 \subsubsection{Modular reuse}
 As with the first-path experiments, module reuse between tasks will be an important metric for these experiments. One unit of modular reuse is counted if a path contains a pre-trained module. In a multi-task scenario with more than two tasks, a module might be reused in more than one path and are in those cases counted once for each path reusing it. When discussing the properties of each algorithms modular reuse, it is the cumulative reuse for each task that is used.
 
-Modular reuse is assumed to be an appropriate metric to describe the transferability of the knowledge a module acquire during training. It is also assumed that modules are able to contain some form of "memetic"\footnote{Memetic is used here to describe a quantification of knowledge in the same way "meme" is used by Richard Dawkins\cite{selfishGene} to describe a unit of cultural knowledge, here as a unit of knowledge used to solve a task.} unit knowledge
+Modular reuse is assumed to be an appropriate metric to describe the transferability of the knowledge a module acquire during training. It is also assumed that modules are able to contain some form of memetic unit knowledge
 
 \subsubsection{Capacity use}
 Highly correlated to reuse, the total amount of modules used (capacity) provides a measure of how efficiently the possible parameters are used for each task. The complexity a classifier is capable of describing is governed by the amount of available capacity in that classifier, where capacity is the amount of tunable\footnote{Here the capacity used by a path can include locked modules, which make them non-tunable.} parameters allocated to the task.
@@ -106,9 +106,9 @@ A population is said to have converged when the diversity can not feasibly be re
     \label{fig:reuse_vs_new}
 \end{figure}
 
-In chapter \ref{exp1}, task difficulty was used to explain why searches resulted in using less pre-trained modules than if modules were selected randomly. We can use this effect as a definition of a task being too simple. For a scenario training on a such a task, performance of a path consisting of modules being trained \textit{de novo} would improve quicker than the performance of a path with a lot of reuse. A hypothetical scenario is plotted in figure \ref{fig:reuse_vs_new} where it is easier to train new module than learning the interface of locked modules. If the selection pressure of an algorithm is low enough for the population to converge before the intersection point between the two performance curves, training new modules from scratch would be seen a heavily favored by the algorithm.  Algorithms that converge after that point would have a higher likelihood of reusing modules as they have enough "search time" to learn the locked module interfaces. A high selection pressure algorithm with a rapid convergence will have a higher likelihood of converging before the intersection point, and we would, therefore, expect it to have a lower reuse than algorithms with a low selection pressure. 
+In chapter \ref{exp1}, task difficulty was used to explain why searches resulted in using less pre-trained modules than if modules were selected randomly. We can use this effect as a definition of a task being too simple. For a scenario training on a such a task, performance of a path consisting of modules being trained \textit{de novo} would improve quicker than the performance of a path with a lot of reuse. A hypothetical scenario is plotted in figure \ref{fig:reuse_vs_new} where it is easier to train new module than learning the interface of locked modules. If the selection pressure of an algorithm is low enough for the population to converge before the intersection point between the two performance curves, training new modules from scratch would be as a heavily favored by the algorithm.  Algorithms that converge after that point would have a higher likelihood of reusing modules as they have enough "search time" to learn the locked module interfaces. A high selection pressure algorithm with a rapid convergence will have a higher likelihood of converging before the intersection point, and we would therefore expect it to have a lower reuse than algorithms with a low selection pressure. 
 
-Each path taking part in a tournament is trained and evaluated, meaning searches with a high tournament size will train its modules more for each generation than searches with a low tournament size. Algorithm 1b which throughout the multi-task scenario has the highest tournament size is therefore expected to reach the highest validation accuracy among the algorithms tried, followed by algorithms 3a and 3b with a total amount of evaluations of 1317 evaluations during 100 generations. The low tournament size algorithms 1a and 1c, the least amount of evaluations and the accuracy, is expected to reflect that. Algorithms 2a and 2b change between the maximum and minimum set tournament sizes and we expect them to therefore gradually change accordingly.
+Each path taking part in a tournament is trained and evaluated, meaning searches with a high tournament size will train its modules more for each generation than searches with a low tournament size. Algorithm 1b, which throughout the multi-task scenario has the highest tournament size, is therefore expected to reach the highest validation accuracy among the algorithms tried, followed by algorithms 3a and 3b with a total amount of evaluations of 1317 evaluations during 100 generations. The low tournament size algorithms 1a and 1c, the least amount of evaluations and the accuracy, is expected to reflect that. Algorithms 2a and 2b change between the maximum and minimum set tournament sizes and we expect them to therefore gradually change accordingly.
 
 \section{Experimental setup}
 \label{exp2:implementation}
@@ -162,7 +162,7 @@ Also tested are the null-hypotheses that a algorithm A have the same distributio
 As a metric by itself, the capacity is influenced both by path-size and module reuse. All paths being equal, a high level of reuse for one algorithm would yield a significant difference in the used capacity as the total number of used modules is reduced. As this is not observed, we would expect the mean reuse for each algorithm not to contain significant differences.
 
 \begin{sidewaysfigure}[p!]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/Module_reuse_pr_generation.pdf}
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/inuse/Module_reuse_pr_generation.pdf}
     \caption[Module reuse plot]{The average module reuse during the multi-task learning sequence. Each jump is caused by the saving of an optimal path, and the next task having more locked modules to reuse. The first 100 generations do not have any previously learned knowledge to reuse.}
     \label{fig:search.reuse}
 \end{sidewaysfigure}
@@ -182,7 +182,7 @@ This shows that the search actively select untrained modules, but also tat we mi
 \ref{fig:search.hamming_diversity} visualizes the average population diversity for each algorithm for each task calculated with the pair-wise Hamming distance metric. 
 
 \begin{sidewaysfigure}[p!]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/Average_population_diversity_reduced_hamming.pdf}
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/inuse/Average_population_diversity_reduced_hamming.pdf}
     \caption[Pair-wise Hamming distance diversity]{The average pairwise Hamming distance within each generation is used as a measure for population diversity. Each subplot (in order left to right) is each task in trained order.}
     \label{fig:search.hamming_diversity}
 \end{sidewaysfigure}
@@ -190,7 +190,7 @@ This shows that the search actively select untrained modules, but also tat we mi
 When a generation is over, and mutations of the tournament winner replace all losers, the population makes a large shift in diversity unless most of the tournament participants have a similar genome, at which point population has most likely converged. This is why all diversity plots (\ref{fig:search.hamming_diversity} and \ref{fig:search.frequency_diversity_unique}) contain rapid changes for sections of high tournament size, while algorithms 1a and 1c (also algorithm 2a for the first tasks, 2b for the later tasks) have more gradual changes. 
 
 \begin{sidewaysfigure}[p!]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/frequency_diversity_unique_path_count.pdf}
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/inuse/frequency_diversity_unique_path_count.pdf}
     \caption[Unique genome frequency diversity]{The number of unique paths within a population. Plotted for every task and every algorithm.}
     \label{fig:search.frequency_diversity_unique}
 \end{sidewaysfigure}
@@ -213,7 +213,7 @@ While both algorithm 1a and 1c have low selection pressure and therefore also a 
 \subsection{Results}
 
 \begin{sidewaysfigure}[p!]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/Training_accuracy.pdf}
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/inuse/Training_accuracy.pdf}
     \caption[Fitness plot]{Average fitness during search. The dotted lines is the average achieved validation accuracy for that task and that algorithm.}
     \label{fig:search.accuracy}
 \end{sidewaysfigure}
@@ -221,7 +221,7 @@ While both algorithm 1a and 1c have low selection pressure and therefore also a 
 As the training of each path is done during and controlled by the search, how the average training accuracy develops gives an indication of how quickly the algorithms are able to influence the overall PathNet to learn a task. As discussed in section \ref{exp2:implementation.search}, the act of training one tournament of genomes affect the previously evaluated fitness values. Because of this, the populations average fitness value would be a highly misleading metric to use and therefore what is plotted in figure \ref{fig:search.accuracy} is the average fitness score achieved within each generations tournament. Also plotted is the mean validation accuracy reached for each algorithm. This validation score is only calculated after an optimal path have been found for each task, and can therefore not be viewed as a function of generation number. The validation accuracy is visualized separately as a box-plot in figure \ref{fig:search.validation}.
 
 \begin{sidewaysfigure}[p!]
-    \includegraphics[width=1.2\textwidth, center]{Chapters/4.Experiments/exp2/figures/large/validation_boxplot.pdf}
+    \includegraphics[width=1.2\textwidth, center]{Chapters/4.Experiments/exp2/figures/inuse/validation_boxplot.pdf}
     \caption[Validation accuracy plot]{Boxplot of validation accuracy reached for each task and each algorithm.}
     \label{fig:search.validation}
 \end{sidewaysfigure}
@@ -230,12 +230,12 @@ Again, one MWW-test is run for every pair of algorithm for each task, this time 
 \begin{itemize}
     \item Low tournament size: There is no significant difference in accuracy distribution between the algorithms with static low tournament size. The algorithms 2a and 2b are also similar to 1a and 1c for those tasks where they have a low tournament size. Meaning task 1a for algorithm 2a and task 3b and 4 for algorithm 2b. 
     \item High tournament size: Algorithm 1b is only significantly different from other algorithms when they use a tournament size of 2 or 3, the exception being algorithm 1a for task 3b and 4, where the null-hypothesis cannot be rejected. 
-    \item Changing tournament size: Algorithms 2a and 2b differ significantly only when their tournament size is most different; tasks 1a and 4. 
-    \item Dynamic tournament size: Algorithms 3a and 3b does not differ for any task, and are also similar to algorithm 1b for all tasks. They do seem to differ from the low tournament size algorithms for most tasks, however, except task 3b. 
+    \item Tournament size changing between searches: Algorithms 2a and 2b differ significantly only when their tournament size is most different; tasks 1a and 4. 
+    \item Tournament size changing during searches: Algorithms 3a and 3b does not differ for any task, and are also similar to algorithm 1b for all tasks. They do seem to differ from the low tournament size algorithms for most tasks, however, except task 3b. 
 \end{itemize}
 
 \begin{sidewaysfigure}[p!]
-    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/large/Training_value.pdf}
+    \includegraphics[width=1.2\textwidth,center]{Chapters/4.Experiments/exp2/figures/inuse/Training_value.pdf}
     \caption[Training vs cumulative accuracy plot]{The total amount of training in all optimal paths for each multi-task learning sequence plotted against the cumulative validation accuracy reached for that sequence. The circle size corresponds to the total number of used PathNet modules.}
     \label{fig:search.training_value}
 \end{sidewaysfigure}

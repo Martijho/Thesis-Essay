@@ -18,7 +18,7 @@ The question we want to answer is this:
 
 
 \section{Description}
-The experimental structure here is simple. The same experimental parameters as the experiment in chapter \ref{exp2} are used again, but here the seven algorithms will here be applied to a binary task problem where both tasks are the same: a cSVHN classification problem with all ten classes. After searching for an optimal path for both tasks, the reuse is noted. 
+The experimental structure here is the same as in chapter \ref{exp2} with two differences. The maximum tournament size used here is 10 instead of 25, and the tasks trained on is two cases of full cSVHN classification problem with all ten classes. After searching for an optimal path for both tasks, the module reuse for the second task is noted. 
 
 By performing this experimental trial for each algorithm multiple times, we can compare the observations of reuse with the probability of seeing these results in random module selection, and then with each other. 
 
@@ -41,7 +41,7 @@ and in this experiment
 \begin{equation*}
     \prod_{i=0}^{3-1}(6-i)^{3}\approx 1.7\times10^{6}
 \end{equation*}
-Reducing the PathNet size from 20 modules in each layer to 6 have reduced the search space with five orders of magnitude, and it should, therefore, be significantly easier to find reusable modules here than in the previous experiment.
+Reducing the PathNet size from 20 to 6 modules in each layer have reduced the search space with five orders of magnitude, and it should, therefore, be significantly easier to find reusable modules here than in the previous experiment.
 
 \input{Chapters/4.Experiments/exp3/tables/motecarlo.tex}
 
@@ -51,7 +51,7 @@ We can approximate the probability of finding any number of reuse by randomly se
 \end{equation*}
 Meaning we can tell the probability of reuse to the seventh decimal place from the Monte-Carlo results. The results of the performed Monte-Carlo estimation can be found in table \ref{tab:montecarlo}.
 
-We will calculate the expected reuse distribution based on the Monte-Carlo estimated probabilities, and use Mann-Whitney tests to see how the algorithms reuse holds up compared to expectations. 
+We will calculate the expected reuse distribution based on the Monte-Carlo estimated probabilities, and use Mann-Whitney tests to see how the algorithms module reuse holds up compared to expectations. 
 
 Learning from the conclusion in chapter \ref{exp2}, the algorithms maximum tournament size is reduced from 25 to 10.
 
@@ -69,7 +69,7 @@ Learning from the conclusion in chapter \ref{exp2}, the algorithms maximum tourn
     \label{fig:exp3.frequency}
 \end{figure}
 
-As the algorithms that run here are the same as in chapter \ref{exp2}, the convergence rates are quite similar to figures \ref{fig:exp3.hamming} and \ref{fig:exp3.frequency}. However, the searches are run for 250 generations, which makes the diversity drop in algorithms with slow convergence, such as 1a and 1c, become apparent. 
+As the algorithms that run here are the same as in chapter \ref{exp2}, the convergence rates in figures \ref{fig:exp3.hamming} and \ref{fig:exp3.frequency} are quite similar to what we saw in section \ref{exp2:diversity}. However, the searches are run for 250 generations, which let the diversity of algorithms with low selection pressure converge further.
 
 Noteworthy about these diversity plots is that algorithm 1c in both cases converge more within the 250 generations for task 2 than task 1. Testing the null-hypothesis that the final generations population have a similar pair-wise Hamming distance for task 1 than task 2 gives a p-value of 0.00229 for a one-sided Mann-Whitney test. Confirming the observation is not due to an outlier in the data, but rather a difference in the diversity distributions. The only other algorithms that change their convergence between task 1 and task 2 are algorithms 2a and 2b for obvious reasons.  
 
@@ -79,11 +79,11 @@ Noteworthy about these diversity plots is that algorithm 1c in both cases conver
     \caption[Module reuse during search]{The change in reuse plotted over the search duration. Four generation limits were used, but the reuse during search are expected to be the same across the different search termination limits.}
     \label{fig:exp3.reuseprogression}
 \end{sidewaysfigure}
-\begin{figure}[ht]
+\begin{sidewaysfigure}[ht]
     \includegraphics[width=1.25\textwidth, center]{Chapters/4.Experiments/exp3/figures/reuse_boxplot.pdf}
-    \caption[Module reuse boxplot]{The average amount of unique paths for each algorithm over 250 generations.}
+    \caption[Module reuse boxplot]{The module reuse for each algorithm group. The reuse for each generation limit is presented, as well as the reuse for all experimental trials, regardless of search length.}
     \label{fig:exp3.reuseboxplot}
-\end{figure}
+\end{sidewaysfigure}
 
 Figure \ref{fig:exp3.reuseprogression} show the average reuse for each algorithm changing during the searches with different termination limit. Algorithms with high reuse for the second task (1b and 2b) reach the highest level of reuse within the first 30 generations, at which point it starts to drop. Algorithms using a low tournament size instead gradually increase in reuse, where it looks to surpass the other algorithms around 100 generations.  
 
@@ -100,7 +100,7 @@ Running the number of MWW-tests needed to compare the individual termination lim
 
 \begin{sidewaysfigure}[ht]
     \includegraphics[width=1.25\textwidth, center]{Chapters/4.Experiments/exp3/figures/fitness_by_evaluations.pdf}
-    \caption[Average tournament fitness plotted by evaluation]{The average tournament fitness as it changes with respect to number of evaluations for the first 800 evaluations.}
+    \caption[Average tournament fitness plotted by evaluation]{The average tournament fitness as it changes with respect to number of evaluations for the first 800 evaluations. The dotted lines are average fitness during search for task 1, while the whole lines are for task 2.}
     \label{fig:exp3.fitness_by_evaluations}
 \end{sidewaysfigure}
 

@@ -1,6 +1,6 @@
 \chapter{Implementation}
 \label{implementation}
-Machine Learning and especially Deep Learning systems are resource intensive algorithms that need large amounts of both training data and computations. Because of the nature of computations needed for machine learning typically is large matrix operations, it is preferable to run most of the training on GPUs.
+Machine Learning and especially Deep Learning systems are resource intensive algorithms that need large amounts of both training data and computations. Because the computations needed for ML typically is large matrix operations, it is preferable to run most of the training on GPUs.
 
 \textbf{Edit note: Need more here}
 
@@ -49,8 +49,8 @@ In the example above, the two lists yield different module-types. \textit{dense}
 
 The Layer-objects also define other operations that can be turned on or off on instantiation through parameters. These are:
 \begin{itemize}
-    \item BatchNormalization in Conv-modules. This normalizes the output from a layer within each batch. The reason for this is to average potential extremes/outliers in input examples to limit radical gradients during training. \textbf{Edit note: citation}
-    \item MaxPooling used after last Conv-layer. This operation reduces the dimensionality of a layer output by reducing each x-by-y\footnote{Here, only MaxPooling of 2-by-2 windows are performed. This means a 10-by-10 feature map would be reduced to 5-by-5.} window of pixels to the max value within that window. \textbf{Edit note: citation}.
+    \item BatchNormalization\cite{batchnorm} in Conv-modules. This normalizes the output from a layer within each batch. This is to average potential extremes/outliers in input examples to limit radical gradients during training.
+    \item MaxPooling used after last Conv-layer. This operation reduces the dimensionality of a layer output by reducing each x-by-y\footnote{Here, only MaxPooling of 2-by-2 windows are performed. This means a 10-by-10 feature map would be reduced to 5-by-5.} window of pixels to the max value within that window.
     \item Flatten before the first Dense-layer. This \textit{"housekeeping"} functionality takes some n-dimensional tensor input and flattens it to a vector to be input into a fully connected NN.  
 \end{itemize}
 
@@ -60,7 +60,7 @@ The PathNet-object is the only one utilizing the Layer and Task-objects. Through
 
 \section{Search implementation}
 \label{implementation.search}
-As with PathNet the search has a modular implementation for easy adaptability and reuse in all experiments. Based on a hyper-parameter dictionary, the search method uses predetermined functions for different GA operations such as selection-schemes for winner selection or path mutation. The selection-schemes used is winner-replace-all where a mutation of the winner replace all other genomes in the tournament, and a 3-to-2 scheme where the two winners of a tournament size of 3 are recombined and the offspring replace the tournament looser.
+As with PathNet, the search has a modular implementation for easy adaptability and reuse in all experiments. Based on a hyper-parameter dictionary, the search method uses predetermined functions for different GA operations, such as selection-schemes for winner selection or path mutation. The selection-schemes used is winner-replace-all, where a mutation of the winner replace all other genomes in the tournament, and a 3-to-2 scheme where the two winners of a tournament size of 3 are recombined and the offspring replace the tournament looser.
 
 Every generation updates a Reprint-structure that gives terminal output of the search progress (see figure \ref{fig:searchoutput} for screen capture of a experimental run).
 \begin{figure}[ht]
@@ -80,7 +80,7 @@ Every generation updates a Reprint-structure that gives terminal output of the s
 
 \section{Implementation difficulties} 
 \label{implementation:problems}
-Some implementation difficulties occurred during implementation. Most of these were due to TensorFlow effect I were unaware of. Some of the most noteworthy are listed here to help with future implementation
+Some implementation difficulties occurred during implementation. Most of these were due to TensorFlow effect I was unaware of. Some of the most noteworthy are listed here to help with future implementation.
 \begin{itemize}
     \item The TensorFlow backend session is not made for creating multiple graphs, and memory leaks can happen when memory used for graphs is not freed properly. Functionality in TensorFlow makes it possible to reset a TensorFlow session, but all graph-variables has to be reinitialized afterward. 
     \item TensorFlow's default is to use all available GPU-memory. Setting the TensorFlow-sessions GPU-options "allow-growth" parameter to 4 sets memory allocation to be done as needed.
@@ -98,11 +98,11 @@ One of the most commonly used data sets for image classification is the MNIST\ci
     \label{fig:mnist}
 \end{figure}
 
-MNIST is a simple data set as image classification goes (see section \ref{exp1:BIN.results}). The small grayscale images contain only one small object in the middle of the image, and almost all pixels is either 0 (background) or 1 as seen in figure \ref{fig:mnist}. This makes the classification task rather easy. A list of reached accuracies\footnote{As of March 2018} can be found on the dataset's web page where it is claimed that the lowest error rate is 0.23\cite{goodmnist}, and even a KNN-classifier without preprocessing can achieve an accuracy of 97.17. 
+MNIST is a simple data set as far as image classification goes (see section \ref{exp1:BIN.results}). The small grayscale images contain only one small object in the middle of the image, and almost all pixels is either 0 (background) or 1 as seen in figure \ref{fig:mnist}. This makes the classification task rather easy. A list of reached accuracies\footnote{As of March 2018} can be found on the dataset's web page where it is claimed that the lowest error rate is 0.23\cite{goodmnist}, and even a KNN-classifier without preprocessing can achieve an accuracy of 97.17. 
 
 
 \subsection{SVHN}\label{Implementation:SVHN}
-The Street View House Number\cite{SVHN} data set is real-world images from Google Street View made for machine learning development. The original dataset contains over 600 000 variable resolution images of house numbers and bounding boxes around each digit with a label for each box. In this thesis, the version of SVHN used is made of cropped images (cSVHN) as seen in figure \ref{fig:csvhn}. These images are 32-by-32 colored images that are made to function in somewhat the same way MNIST does with a simple object and static size. Note, however, that where MNIST images contain only the object that is the basis for classification, cSVHN contain distractions (noise) in the image such as half-cropped other digits. 
+The Street View House Number\cite{SVHN} data set is real-world images from Google Street View made for machine learning development. The original dataset contains over 600 000 variable resolution images of house numbers and bounding boxes around each digit with a label for each box. In this thesis, the version of SVHN used is made of cropped images (cSVHN) as seen in figure \ref{fig:csvhn}. These images are 32-by-32 colored images that are made to function in somewhat the same way MNIST does, with a simple object and static size. Note, however, that where MNIST images contain only the object that is the basis for classification, cSVHN contain distractions (noise) in the image such as half-cropped neighbouring digits. 
 
 \begin{figure}[p!]
     \centering
