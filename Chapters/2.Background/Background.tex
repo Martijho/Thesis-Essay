@@ -5,7 +5,7 @@ Improvements in computation and algorithms have since then taken Machine Learnin
 \section{Machine Learning}
 \label{background:ML}
  
-In Machine Learning, the fields of statistics, mathematics, and data analysis are combined and applied to automatic modeling of data. Its three main sub-fields, supervised, unsupervised and Reinforcement Learning covers a vast number of structures and techniques. This thesis will focus on the flag-ship of Machine Learning, the Artificial Neural Network,  set it in a supervised learning scenario where it is applied to a classification problem.
+In Machine Learning, the fields of statistics, mathematics, and data analysis are combined and applied to automatic modeling of data. Its three main sub-fields, supervised, unsupervised and Reinforcement Learning (RL) covers a vast number of structures and techniques. This thesis will focus on the flag-ship of Machine Learning, the Artificial Neural Network,  set it in a supervised learning scenario where it is applied to a classification problem.
 
 \begin{figure}[ht] 
 \centering
@@ -29,7 +29,7 @@ For this thesis, the loss function used is \textit{cross-entropy} which is well 
 
 The goal of the training is to minimize the loss function for a given dataset. To accomplish this, each calculated loss is backpropagated through the neural network, and an optimization algorithm is used to calculate the gradient of the weights with regards to the layer output and then to adjust the weights. The optimizers used in the experiments in chapter \ref{exp1}, \ref{exp2}, and \ref{exp3} are stochastic gradient descent(SGD)\cite{sgd} and Adaptive Moment Estimation (Adam)\cite{adam}. 
 
-The function approximation properties of neural networks are used as a regression tool in data analysis, prediction, and reward signal estimation for reinforcement learning among other areas, but is as mentioned, applied to classification in this thesis.
+The function approximation properties of neural networks are used as a regression tool in data analysis, prediction, and reward signal estimation for RL among other areas, but is as mentioned, applied to classification in this thesis.
 
 The final softmax layer outputs an estimated probability for each label given some input where the label given highest probability is selected as the model's prediction. As long as the input features to the network is correlated to the label in some way and there is enough training data, the neural network will adapt to the patterns in input features and learn one or more classification rules. In the case of an image classifier, the network is provided with the raw pixel values in the image. A normal, fully connected neural network\footnote{Also called affine, or dense networks.} is badly suited for this type of classification since attributes in images often change location or scale. E.g., a picture of a dog is still a picture of a dog if the image is rotated upside down, rescaled, or framed differently. To account for all these cases, the dataset used would have to contain multiple examples of all these variations.
 \begin{figure}[ht] 
@@ -67,7 +67,7 @@ Usually, when talking about CNNs, the line is crossed into \textit{Deep Learning
     \label{fig:semanticsegmentation}
 \end{figure}
 
-How \textit{deep} a DNN is made depends on the task at hand. Take for example a complicated task such as \textit{semantic segmentation}. Semantic segmentation is a variation of image classification where each pixel in an input image is assigned a class label, and the whole of the image is segmented into its semantic parts (see figure \ref{fig:semanticsegmentation}). In a CNN performing this task, the spacial information in the original image cannot be entirely removed since we want to create a new image with the original dimensionality and spatial locations of objects. Such a neural network would need to have enough \textit{capacity} to retain all needed knowledge to complete the task. The capacity of a NN is how much information can be stored in its weights, and is a measure highly correlated to the network's number of parameters. Managing capacity needs of a NN is part of the motivation behind encouraging module reuse in experiments 1, 2 and 3 (see chapters \ref{exp1}, \ref{exp2} and \ref{exp3}).
+How deep a \textit{Deep Neural Network}(DNN) is made depends on the task at hand. Take for example a complicated task such as \textit{semantic segmentation}. Semantic segmentation is a variation of image classification where each pixel in an input image is assigned a class label, and the whole of the image is segmented into its semantic parts (see figure \ref{fig:semanticsegmentation}). In a CNN performing this task, the spacial information in the original image cannot be entirely removed since we want to create a new image with the original dimensionality and spatial locations of objects. Such a neural network would need to have enough \textit{capacity} to retain all needed knowledge to complete the task. The capacity of a NN is how much information can be stored in its weights, and is a measure highly correlated to the network's number of parameters. Managing capacity needs of a NN is part of the motivation behind encouraging module reuse in experiments 1, 2 and 3 (see chapters \ref{exp1}, \ref{exp2} and \ref{exp3}).
 
 Intuitively, the difference between NNs and Deep neural networks (DNN) is just the number of layers in the model, but functionally we can view the DNN as a network performing its own feature extraction from raw data, like in the visualization in figure \ref{fig:NNvsDNN}. 
 
@@ -111,17 +111,18 @@ Both humans and animals learn better when examples provided are ordered and grad
 \label{background:catastrophicforgetting}
 A problem that arises in systems where parameters are trained on multiple sequential tasks is what is called \textit{catastrophic forgetting}. Set in a transfer learning scenario, this effect manifests itself as moving parameters away from an area of low error for a previously trained task. This movement could, for instance, be because the parameters are fine-tuned for a new task. While the performance for the second task increase, performance for the first task decrease because the \textit{knowledge is forgotten} when the weights are re-adapted to the new data. This is not a problem in a scenario where the source task is considered a stepping stone to reach good performance for the target task, but might be if all tasks trained on are of the same importance.
 
+\iffalse
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.7\linewidth]{Chapters/2.Background/figures/EWC.pdf}
     \caption[Elastic Weight Consolidation]{Reconstruction of a figure from the paper on Elastic Weight Consolidation\cite{ewc}. The figure shows the parameter space \(\mathcal{P}\) and hypothetical areas of low error for two tasks A and B. The arrows indicate the direction EWC \textit{red} and normal training \textit{purple} takes the parameters.}
     \label{fig:ewc}
 \end{figure}
-
 \subsection{Elastic Weight Consolidation}
 Elastic Weight Consolidation (EWC) is a novel algorithm proposed in January of 2017 by Kirkpatrick et al.\cite{ewc}. During the transfer of weights from task A to task B, over-parameterization\footnote{Overestimating the amount of capacity a network need to solve a task.} makes it likely that a solution to problem B lays close to the solution for task A in the parameter space \(\mathcal{P}\)\footnote{A solution may be viewed as a set of parameters \(\bar{\theta}\). For multiple parameters in \(\bar{\theta}_{A}\) as a solution to task A, many configurations of those will give the same performance for the NN and all those sets of \(\bar{\theta}_{A}\) would be considered optimal sets.}. During optimization of parameters \(\bar{\theta}_{B}\) for task B, EWC makes sure the parameters stay within an area of low error for task A as seen in figure \ref{fig:ewc}
 
 Using EWC, Kirkpatrick et al.\cite{ewc} was able to train the same NN on ten different Atari games without the effects of catastrophic forgetting between training tasks. With a human-normalized score of 1 for each game, giving a total possible score\footnote{where is 0 the same as a random agent, and 10 is at least human-level performance on all games.} of 10, the EWC driven training reached a score of around six after 500 million training frames. The control never reached anything higher than 1 as each new task cause parameters to move away from areas of low error for the previous tasks.
+\fi
 
 \subsection{Progressive Neural Networks}
 Rusu et al. published a paper in September of 2016\cite{progressiveneuralnetworks} where they addressed the problem of catastrophic forgetting during transfer learning with fine-tuning. Their proposed solution, Progressive Neural Networks (PNN) were shown to be able to learn multiple tasks sequentially without overwriting the previously trained weights. This was done by horizontally scaling the DNN with a new stack of layers for each new task.
@@ -131,7 +132,7 @@ Rusu et al. published a paper in September of 2016\cite{progressiveneuralnetwork
     \caption[Progressive Neural Network]{Example of a PNN. \textit{Left}: a three-layer NN is trained on task A. \textit{Right}: Adding another stack of three hidden layers that are being trained on task B. The weights in the first stack trained on A is now locked to the back propagation from task B, but its weights may still be used (shown by arrows between the layers). Green indicates layer is open to backpropagation, red indicates it is locked. Note that injection of a layer from an older task is not possible as lateral connections are only \textit{to} the new layer. The figure is a simplification of multiple figures from the article\cite{progressiveneuralnetworks}.}
     \label{fig:pnn}
 \end{figure}
-After training a DNN on a task A\footnote{In the paper, the PNN was used in a Reinforcement Learning scenario.}, a new DNN was initialized with lateral connections (see fig. \ref{fig:pnn}) to the NN trained on task A and then trained on task B with back propagation only done through the newly initialized layers. This ensures that the new DNN can optimize freely on task B, but will be able to utilize the weights trained on task A, without catastrophic forgetting occurring in the first DNN. When a sufficient performance on task B is reached, the PNN can perform optimally on both tasks, given some selection of the output (i.e., if given data for a task within the domain A, the output from the weights trained on task B is not optimal). Multiple tasks can be trained using this method. For each new task, a new DNN is initialized, and the other DNNs in the PNN is connected laterally to each new layer. 
+After training a DNN on a task A\footnote{In the paper, the PNN was used in a RL scenario.}, a new DNN was initialized with lateral connections (see figure \ref{fig:pnn}) to the NN trained on task A and then trained on task B with back propagation only done through the newly initialized layers. This ensures that the new DNN can optimize freely on task B, but will be able to utilize the weights trained on task A, without catastrophic forgetting occurring in the first DNN. When a sufficient performance on task B is reached, the PNN can perform optimally on both tasks, given some selection of the output (i.e., if given data for a task within the domain A, the output from the weights trained on task B is not optimal). Multiple tasks can be trained using this method. For each new task, a new DNN is initialized, and the other DNNs in the PNN is connected laterally to each new layer. 
 
 We can compare the way each new task is learned to a transfer learning scenario where backpropagation is locked in the transferred layers (see figure \ref{fig:transferexperiment}). The difference being the layer outputs are calculated in parallel for the two models, and multiple of these outputs may be introduced in the new model through what the paper calls \textit{adapters} (not visualized in \ref{fig:transferexperiment}). These \textit{adapters} performs dimensionality reduction as well as tunable scalars so the model can scale lateral connections as needed for the new task.
 
@@ -139,7 +140,7 @@ A problem with this scaling raised and addressed in the paper is that of quadrat
 
 \section{Genetic Algorithms}
 \label{background:GA}
-Genetic Algorithms (GA), a sub-category of evolutionary algorithms,  are biologically inspired algorithms that generate high-quality solutions to optimization and search problems. By mimicking natural operators like \textit{crossover} and \textit{mutation}, GAs views its possible solutions as individual genomes in a population and applies these natural operators on the population in a simplification of how evolution works. 
+Genetic Algorithms\cite{GAbook} (GA), a sub-category of evolutionary algorithms,  are biologically inspired algorithms that generate high-quality solutions to optimization and search problems. By mimicking natural operators like \textit{crossover} and \textit{mutation}, GAs views its possible solutions as individual genomes in a population and applies these natural operators on the population in a simplification of how evolution works. 
 
 A vital driving force of GAs is the fitness-function, which maps a genome to a fitness value that can be used to rank solutions (genotypes) by how well they perform. In a real-world example of the fitness function, a \textit{strong} animal of some sort, able to acquire nourishment and fend off potential predators, is given a higher fitness value than a similar animal not as well suited for its environment. The famous term \textit{survival of the fittest} is valid in both this example and the \textit{in silico} representation of evolution. The strongest animal has a higher probability to survive and reproduce, and GAs are implemented to favor solutions that yield high fitness values.  
 When a population is ranked by its fitness, different selection schemes can be applied to simulate the natural selection of strongest genomes. This selection function has a direct influence on how diverse the population is in its solutions. While we intuitively would like to remove poor solutions and keep the strong, this might guide the population only to sustain one genotype, at which point we say the population has \textit{converged}. This causes the search to get stuck in a \textit{local optima}, where the space of possible solutions have not been explored thoroughly, and we are not able to say the solution we found is among the best. Instead, the selection function varies which genomes are removed, where the more fit genotypes typically have the highest probability of survival. 
@@ -153,29 +154,29 @@ Some recombination of genomes is usually performed with a \textit{crossover} alg
 \begin{figure}[ht]
     \centering
     \begin{subfigure}[ht]{0.25\linewidth}
-        \includegraphics[width=\linewidth]{Chapters/2.Background/figures/ga_flowchart.pdf}
+        \includegraphics[width=\linewidth]{Chapters/2.Background/figures/GA.pdf}
         %\caption{Genetic Algorithm}
     \end{subfigure}
     \hspace{0.25\textwidth}
     \begin{subfigure}[ht]{0.25\linewidth}
-        \includegraphics[width=\linewidth]{Chapters/2.Background/figures/tournamentsearch_flowchart.pdf}
+        \includegraphics[width=\linewidth]{Chapters/2.Background/figures/TS.pdf}
         %\caption{Tournament Search}
     \end{subfigure}
-    \caption[Algorithm flowcharts]{Flowcharts of the general Genetic Algorithm (left) and Tournament Search (right). The color blue indicates the operation is standard in a GA, while purple is special to a tournament search}
+    \caption[Algorithm flowcharts]{Flowcharts of the general Genetic Algorithm (left) and Tournament Search (right). The color blue indicates the operation is standard in a GA, while purple is special to a tournament search. One complete run of all operations in the gray area constitute one generation.}
     \label{fig:algorithmflowcharts}
 \end{figure}
 
 \subsection{Tournament search}
-One implementation of a genetic algorithm is the \textit{Tournament Search} or \textit{Tournament Selection}. True to the name, in every generation, a subset of the population is selected as contenders in a tournament. The genotypes are evaluated with a fitness function, and some selection scheme chooses genomes to be reinserted back into the population based on the fitness ranking. The selection probability is given as 
+One implementation of a genetic algorithm is the \textit{Tournament Search}. True to the name, in every generation, a subset of the population is selected as contenders in a tournament. The genotypes are evaluated with a fitness function, and some selection scheme chooses genomes to be reinserted back into the population based on the fitness ranking. The selection probability is given as 
 \begin{equation}
     \label{eq:tournamentsearch}
     P_{i} = p(1-p)^{i-1}
 \end{equation}
-where \(i\) is the fitness-ranking achieved during the tournament (1 being first place and so on) and \(p\) is the probability of selecting the first place as survivor.  
+where \(i\) is the fitness-ranking achieved during the tournament (1 being first place and so on) and \(p\) is the probability of selecting the first place as survivor. Figure \ref{fig:algorithmflowcharts} juxtapose flowcharts for a general GA and the Tournament Search algorithm. 
 
-In the search implementation used in the experiments in this thesis (see \ref{exp1:implementation}, \ref{exp2:implementation}, and \ref{exp3:implementation}), a version of the tournament search is used. For every generation, a subset of the total population, given by the tournament size, is selected and evaluated. The winner then replaces each of the other contestants, making this implementation what is called a \textit{Deterministic Tournament Selection}, e.g., \(p=1\). Before the winner and its duplicate(s) are inserted back into the population, each copy of the winner is mutated under some probability to keep the diversity. 
+In the search implementation used in the experiments in this thesis (see \ref{exp1:implementation}, \ref{exp2:implementation}, and \ref{exp3:implementation}), a version of the tournament search is used. For every generation, a subset of the total population, given by the tournament size, is selected and evaluated. The winner then replaces each of the other contestants, making this selection implementation what is called a \textit{Deterministic Tournament Selection}, e.g., \(p=1\). Before the winner and its duplicate(s) are inserted back into the population, each copy of the winner is mutated under some probability to keep the diversity. 
 
-A benefit of the tournament search, except for its efficiency in implementing and ability to work in parallel architectures, is that the \textit{selection pressure} of the search can easily be adjusted(see \ref{exp2:description}). By increasing the tournament size, the winner of the tournament influence the future generations more.
+A benefit of the tournament search, except for its efficiency in implementing and ability to work in parallel architectures, is that the \textit{selection pressure} of the search can easily be adjusted(see \ref{exp2:description}). By increasing the tournament size, the winning genome is replicated more, and future generations are more heavily influenced by that genome. This increased "importance" in being selected as winner of a tournament is what is described as a \textit{selection pressure}.
 
 \subsection{Population Diversity}
 \label{background:diversity}
@@ -186,10 +187,10 @@ Take for instance two binary genomes a and b as a population.
     \begin{split}
         a = [0, 1, 1, 0, 0, 1, 1]\\
         b = [0, 0, 0, 1, 0, 1, 0]\\
-        F_{\textit{Diversity}}(a, b)=x_{1}
+        F_{\text{Diversity}}(a, b)=x_{1}
     \end{split}
 \end{equation*}
-The diversity function \(F_{\textit{Diversity}}(a, b)\) gives a scalar diversity value \(x_{1}\). If we change the genome \(b\) to something more like \(a\), the new diversity \(x_{2}\) is smaller than \(x_{1}\) as the total diversity in the population has been reduced. 
+The diversity function \(F_{\text{Diversity}}(a, b)\) gives a scalar diversity value \(x_{1}\). If we change the genome \(b\) to something more like \(a\), the new diversity \(x_{2}\) is smaller than \(x_{1}\) as the total diversity in the population has been reduced. 
 
 \subsubsection{Pair-wise Hamming Distance}
 One of the most commonly used measures of distance in genotypic space\cite{populationDiversity} is the pair-wise Hamming distance given by the equation 
@@ -197,9 +198,9 @@ One of the most commonly used measures of distance in genotypic space\cite{popul
     \label{eq:Hamming}
     H=\sum_{j=1}^{j=P-1}\sum_{{j}'=j+1}^{{j}'=P}\sum_{i=1}^{i=L}\left |y_{ij}-y_{i{j}'}\right |
 \end{equation}
-where P is the population size, L is the length of genome and \(y_{ji}\) is the i-th genome of genome j. In experiment in chapter \ref{exp2} a reduced form of this formula is used to calculate diversity. See appendix \ref{appendix:Hammingreduction} for reduction proof. While Hamming-distance provides a good metric for diversity, some cases can cause Hamming-distance to misrepresent a change in diversity. 
+where P is the population size, L is the length of genome and \(y_{ji}\) is the i-th genome of genome j. In experiment in chapter \ref{exp2} a reduced form of this formula is used to calculate diversity. See appendix \ref{appendix:Hammingreduction} for reduction proof. While Hamming distance provides a good metric for diversity, some cases can cause Hamming distance to misrepresent a change in diversity. 
 
-Take f.eks the populations 
+Take, for instance, the populations 
 \begin{equation*}
     \begin{split}
         [0, 0, 1, 1]\\
@@ -242,12 +243,11 @@ Each task applied to PathNet is designated a unique end-layer added to every pat
 A \textit{path} is the name given a subset of the modules in a PathNet structure, where the path may contain between 1 and \(\omega\) modules from each layer, where \(\omega\) is adjusted to control the amount of capacity (number of weights) allocated to a path (solution). Each module in this path is locked after training is completed. This locking of the modules is to prevent the weights in the modules from changing if they are reused by subsequent tasks, and this preventative measure is what ensure catastrophic forgetting does not occur in this structure. After all modules in the optimal path, the rest of the modules that are not currently used and does not contain optimized weights for any task is reinitialized. Fernando et al. claims\cite{pathnet} that this re-initialization is because they were not able to reach results that outperformed fine-tuning without it.
 
 \subsection{Search}\label{background:pathnet.search}
-For every new task introduced to the PathNet, a tournament search algorithm is initialized to find an optimal path through the network. A population of pathways (e.g., subsets of modules) are randomly initialized and applied a tournament search with a tournament size of 2 and probability \(p=1\) of selecting the winner (as per equation \ref{eq:tournamentsearch}), making this tournament implementation deterministic. Every fitness evaluation of the tournament contenders is done by training them each a set amount and using the negative loss as a fitness value. One \textit{training unit} is quite small at 50 batches of 16 examples each. This means that evaluating the fitness of a path changes the performance of that path unless all modules in that path are locked to backpropagation.
+For every new task introduced to the PathNet, a tournament search algorithm is initialized to find an optimal path through the network. A population of pathways (e.g., subsets of modules) are randomly initialized and applied a tournament search with a tournament size of 2 and probability \(p=1\) of selecting the winner (as per equation \ref{eq:tournamentsearch}), making this tournament implementation deterministic. Every fitness evaluation of the tournament contenders is done by training them each a set amount and using the negative loss as a fitness value. One \textit{training unit} is quite small at 50 batches\footnote{The loss-value is usually calculated for \textit{batches} of data at the same time to average out potential outliers in the training data.} of 16 examples each. This means that evaluating the fitness of a path changes the performance of that path unless all modules in that path are locked to backpropagation.
 
 When a winner is selected, the genome of the winner is duplicated to replace the looser and then mutated. Each module used in the path have the probability \(\frac{1}{L\omega}\) of being replaced with a neighboring module\footnote{A module with index \(i\) is replaced with a module of index between \(i-2\) and \(i+2\)}, where L is the number of layers, and \(\omega\) is as mentioned the max number of active modules in each layer. The rather large mutation rate ensures that the average path experience a genome change that separates it from the winner. Over multiple generations, however, the population converges to a lower diversity state where more and more paths contain similar modules. The search is terminated under some criteria, either a reached threshold fitness or a generation limit. 
-\textbf{Edit note: More about pathnet needed? Implementation details? Discussion about the experiments done in \cite{pathnet}?}
 
-\newpage
+If an optimal path found for a task contain a module that was trained during a search for a different task, the newly trained path have \textit{one unit of module reuse}. This metric is an important measure for the experiments in chapter \ref{exp1}, \ref{exp2}, and \ref{exp3}.
 
 \section{Statistical methods}
 \subsection{Monte-Carlo probability estimation}
@@ -281,10 +281,10 @@ For a maximum ratio between the standard deviation \(\sigma\) and \(p\) of \(R\)
     \frac{1}{nR^{2}+1}<p
     \label{eq:montecarloP}
 \end{equation}
-This means if we perform a Monte-Carlo simulation of \(10^{6}\) trials and we want the standard deviation to be at most \(0.01p\) the we lose certainty if the probability is smaller than \(\frac{1}{101}\).
+This means a Monte-Carlo simulation of \(10^{6}\) trials where we want the error to be within  \(0.01\) of \(p\), lose certainty if the probability is smaller than \(\frac{1}{101}\).
 
 \subsection{Comparing results}
-When comparing observations during experimentation, hypothesis-testing is a way of providing gravitas to observational differences. A method is used to test a statement about the data (called a null-hypothesis or \(H_{0}\)) by providing a p-value. This p-value is compared to a predetermined significance level (usually 0.05) and provides a metric that describes the likelihood of the null-hypothesis being valid\footnote{A low p-value corresponds to a low likelihood.}. The assumption being we can claim an assumption to be true if the counter-claim is unlikely.  
+When comparing observations during experimentation, hypothesis-testing is a way of providing gravitas to observational differences. A method is used to test a statement about the data (called a null-hypothesis or \(H_{0}\)) by providing a p-value. This p-value is compared to a predetermined significance level (usually 0.05) and provides a metric that describes the likelihood of the null-hypothesis being valid\footnote{A low p-value corresponds to a low likelihood.}. The assumption being: we can claim an hypotheses to be true if the counter-claim is unlikely.  
 
 \subsubsection{Mann–Whitney–Wilcoxon test}
 \label{background:mannwhitney}

@@ -6,19 +6,19 @@
     \caption[Experiment focus]{Visualization of how the questions in this chapter fit in the larger context of this thesis.}
     \label{fig:exp3.questions}
 \end{figure}
-
+\noindent
 The motivation behind reusing modules is, as mentioned in the introduction, to increase the number of tasks a PathNet can learn by decreasing the amount of new capacity a path needs to allocate for a new task. An optimal search algorithm for new paths should, therefore, be able to reuse as much knowledge as possible without limiting the performance. If we assume an ideal search algorithm would find optimal modules for each task, it should be able to find and reuse all learned knowledge if a task is learned twice. 
 
-We can put this to the test by learning some task twice for all seven algorithms in chapter \ref{exp2}. As the amount of module reuse in these experiments was small, we lower the proverbial bar here by reducing the module search space.
+This is put to the test by learning some task twice for all seven algorithms in chapter \ref{exp2}. As the amount of module reuse in these experiments was small, the proverbial "bar" is lowered by reducing the module search space.
 
-The question we want to answer is this: 
+The experiments in this chapter relates to those in chapter \ref{exp1} and \ref{exp2} as seen in figure \ref{fig:exp3.questions}, and will attempt to answer:
 \begin{itemize}
-    \item \emph{"Given optimal conditions for module reuse\footnote{By optimal conditions we mean learning a task where a full set of parameters is already optimized for that task.}, which selection pressure scheme is best suited for knowledge reuse?"}
+    \item \emph{"Given optimal conditions for module reuse, which selection pressure scheme is best suited for knowledge reuse?"}
 \end{itemize}
 
 
 \section{Description}
-The experimental structure here is the same as in chapter \ref{exp2} with two differences. The maximum tournament size used here is 10 instead of 25, and the tasks trained on is two cases of full cSVHN classification problem with all ten classes. After searching for an optimal path for both tasks, the module reuse for the second task is noted. 
+The experimental structure here is the same as in chapter \ref{exp2} with two differences. The maximum tournament size used here is 10 instead of 25, and the tasks trained on is two cases of full cSVHN classification problem with all ten classes. This is to create an optimal\footnote{Optimal conditions here means learning a task where a full set of parameters is already optimized for that task.} conditions for module reuse. After searching for an optimal path for both tasks, the module reuse for the second task is noted. 
 
 By performing this experimental trial for each algorithm multiple times, we can compare the observations of reuse with the probability of seeing these results in random module selection, and then with each other. 
 
@@ -45,13 +45,13 @@ Reducing the PathNet size from 20 to 6 modules in each layer have reduced the se
 
 \input{Chapters/4.Experiments/exp3/tables/motecarlo.tex}
 
-We can approximate the probability of finding any number of reuse by randomly selecting two paths within the limitations of the PathNet dimensions and path-size with a Monte-Carlo approach. Using equation \ref{eq:montecarloP} where we want the probabilities to be minimum ten times as large as the standard deviation (\(R=0.1\)) and \(n=10^{9}\) Monte-Carlo trials, we calculate the probability accuracy to be 
+We can approximate the probability of finding any number of reuse by randomly selecting two paths within the limitations of the PathNet dimensions and path-size with a Monte-Carlo approach. Using equation \ref{eq:montecarloP} where we want the probabilities to be minimum ten times as large as the standard deviation (\(R=0.1\)) and \(n=10^{9}\) Monte-Carlo trials, the probability "accuracy" is calculated to be
 \begin{equation*}
     \frac{1}{nR^{2}+1}=\frac{1}{10^{7}+1}\approx10^{-7}
 \end{equation*}
 Meaning we can tell the probability of reuse to the seventh decimal place from the Monte-Carlo results. The results of the performed Monte-Carlo estimation can be found in table \ref{tab:montecarlo}.
 
-We will calculate the expected reuse distribution based on the Monte-Carlo estimated probabilities, and use Mann-Whitney tests to see how the algorithms module reuse holds up compared to expectations. 
+The expected reuse distribution is calculated based on the Monte-Carlo estimated probabilities, and Mann-Whitney tests is used to see how the algorithms module reuse holds up compared to expectations.
 
 Learning from the conclusion in chapter \ref{exp2}, the algorithms maximum tournament size is reduced from 25 to 10.
 

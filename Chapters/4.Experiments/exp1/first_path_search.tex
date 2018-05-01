@@ -1,56 +1,55 @@
 \chapter{Experiment 1: Selection versus search}
 \label{exp1}
 
-\begin{figure}[hb]
+\begin{figure}[th]
     \includegraphics[width=\textwidth]{Chapters/4.Experiments/exp1/figures/exp1.pdf}
     \caption[Experiment focus]{Visualization of how the questions in this chapter fit in the larger context of this thesis.}
     \label{fig:exp1.questions}
 \end{figure}
+\noindent
+Disregarding what algorithm is used during path searching, training multiple machine learning models are usually rather resource intensive. In the case of finding an optimal path through a PathNet, even more so. Any small reduction in the computation time here will pay dividends in future experimentation, especially when performing multiple experimental trials. Keeping this motivation in mind, the first experiment performed is one where the results either justify a shortcut in experimentation which does not introduce performance issues, or will give some insight into the development of module interfaces when applying different training schemes.
 
-Disregarding what algorithm is used during path searching, training multiple machine learning models are usually rather resource intensive. In the case of finding an optimal path through a PathNet, even more so. Any small reduction in the computation time here will pay dividends in future experimentation, especially when performing multiple experimental trials. Keeping this motivation in mind, the first experiment performed is one where the results either justify a shortcut in experimentation which does not introduce performance issues, or will give some insight into the layer interface of a model when applying different training schemes.
-\newline\newline
-The main research question raised in this chapter is
+The experiments in this chapter relates to those in chapter \ref{exp2} and \ref{exp3} as seen in figure \ref{fig:exp1.questions}, and will attempt to answer:
 \begin{itemize}
     \item \emph{Is there anything to gain from performing a proper search for the first path versus picking an arbitrary path and training those weights using a classic end-to-end training scheme?}
 \end{itemize}
 
 
 \section{Hypothesis}
-It is self-evident that picking a random path and training that subset of weights end-to-end will be more computationally efficient than a full search through a population of possible paths. A full search in a newly initialized PathNet means we are looking for modules with the most appropriate initial weights, which is a lot of labor for a rather small amount of reward. If the change of training scheme from full search to end-to-end training is shown not to affect module reuse, subsequent experiments will be performed with end-to-end training of the first task, as this will reduce search time. End-to-end training is suspected to cause the modules in the randomly chosen path to have a highly codependent interface between modules. This might then make it harder for subsequent tasks to reuse the intertwined modules, and make the encoded knowledge in those modules more task-specific than in the case of a full path-search. 
+It is self-evident that selecting a random path and training that subset of weights end-to-end will be more computationally efficient than a full search through a population of possible paths. A full search in a newly initialized PathNet means we are looking for modules with the most appropriate initial weights, which is a lot of labor for a rather small amount of reward. If the change of training scheme from full search to end-to-end training is shown not to affect module reuse, subsequent experiments will be performed with end-to-end training of the first task, as this will reduce search time. End-to-end training is suspected to cause the modules in the randomly chosen path to have a highly codependent interface between modules. This might then make it harder for subsequent tasks to reuse the intertwined modules, and make the encoded knowledge in those modules less transferable than in the case of a full path-search. 
 
-When training on two tasks, the amount of module reuse between these tasks should be lower when we end-to-end train a randomly chosen path. The following experiment is suggested to test this. 
+When training on two tasks, the amount of module reuse between these tasks should be lower than when end-to-end training a randomly chosen path. The following experiment is proposed to test this.
 
 \section{Description}
-The experiments in this section is divided in two parts. 
+The experiments in this section consists of two parts. 
 \begin{itemize}
     \item Search + Search (S+S): A full search for task A is performed on a newly initialized PathNet. The optimal path is saved and locked as per the PathNet design, then another full search for task B is performed.
-    \item Pick + Search (P+S): A path is arbitrarily selected from the PathNet modules and trained on task A with a classic end-to-end training scheme. This path is then saved and locked normally. Then a full search is done for task B.
+    \item Pick + Search (P+S): A path is arbitrarily selected from the PathNet modules and trained on task A with a classic end-to-end training scheme. This path is then saved and locked normally, followed by a full search for task B.
 \end{itemize}
-Performing multiple runs of this experiment should show a trend in module reuse between S+S and P+S scenarios. To ensure that the first path in P+S does not have an advantage or disadvantage in total capacity,  the path found for task A in S+S is stored and used as the arbitrarily chosen path for task A in the P+S scenario. This ensures that when training on task B in both the S+S and P+S scenario, the only difference is the weights along the path for task A, and the way these were reached. 
+Performing multiple runs of this experiment should show a trend in module reuse between S+S and P+S scenarios. To ensure that the first path in P+S does not have an advantage or disadvantage in total capacity,  the path found for task A in S+S is stored and used as the arbitrarily selected path for task A in the P+S scenario. This ensures that when training on task B in both the S+S and P+S scenario, the only difference is the weights along the path for task A, and the way these were reached. 
 
 The MNIST set of handwritten digits is used for task A and B. This is because of the classification tasks simplicity and the availability of the dataset. It is also the same data used for the initial experiment performed on PathNet by Fernando et al. in \cite{pathnet}. Separating this implementation from \cite{pathnet} is that the data is kept as initially provided, and no additional salt and pepper noise is added to increase the task difficulty. 
 
-
-I performed two experiments of this type. First, a binary classification scenario where I selected four classes from the ten available in the MNIST set and split them into two groups of two classes as task A and task B. The second experiment was a quinary classification scenario where all ten classes were used in two groups of five each. The reason for the second experiment is discussed in the result section of this chapter. 
+Two experiments of this type are performed. First, a binary classification scenario. Four classes, out of the ten available in the MNIST set, is split into two groups of two classes as task A and task B. The second experiment is a quinary classification scenario where all ten classes are used in two groups of five each. The reason for the second experiment is discussed in the section \ref{exp1:BIN.discussion} of this chapter. 
 
 \section{Hyperparameters}
 \label{exp1:implementation}
-The implementation of PathNet has already been described in a preceding section of this thesis, so only the hyper-parameters used in the experiment will be discussed here. A list of hyper-parameters can be found in table \ref{tab:exp1.hyperparam}
+The implementation of PathNet has already been described in a preceding section of this thesis, so only the hyperparameters used in the experiment will be discussed here. A list of these hyperparameters can be found in table \ref{tab:exp1.hyperparam}
 
 \input{Chapters/4.Experiments/exp1/tables/hyperparameter_table}
 
 \section{Binary MNIST classification}
 
 \subsection{Experimental setup}
-A similar PathNet structure to the MNIST experiment in the original PathNet paper is used here: Three layers with a maximum of three active modules from a total of 10, each with ten fully connected nodes followed by ReLU-activation. Since each data point in MNIST is a 28-by-28 greyscale picture, the matrix of input-values is first flattened to a 784-element vector before it is used in training. The classification of digits 3 and 4 were selected as task A, and digits 1 and 2 for task B. 
-During the search, a population of 64 paths was used, and the search halted when a training accuracy of 98\% was reached, or after 500 generations. During tests, searches that exceeded 500 generations usually persisted for more than 1000 generations because the parameters were stuck in a local minima. The population had always converged to one path at that point, and excessive training on a converged path would after a while approximate end-to-end training. Because of this and limitations to available experimentation time, the limit of 500 generations is enforced. The task-specific classification layer that is used alongside the PathNet weights is restricted by the training scenario and its use, so it consists of two fully connected nodes followed by Softmax-activation for classification. A total of 600 experimental runs were performed.
+A similar PathNet structure to the MNIST experiment in the original PathNet paper is used here: Three layers with a maximum of three active modules from a total of 10, each with ten fully connected nodes followed by ReLU-activation. Since each data point in MNIST is a 28-by-28 greyscale picture, the matrix of input-values is first flattened to a 784-element vector before it is used in training. The classification of digits 3 and 4 were used as task A, and digits 1 and 2 as task B. 
 
+During the search, a population of 64 paths was used, and the search terminated when a training accuracy of 98\% was reached, or after 500 generations. During tests, searches that exceeded 500 generations usually persisted for more than 1000 generations because the parameters were stuck in a local minima. The population always converged to one path way before that point, and excessive training on a converged path would after a while approximate end-to-end training. Because of this and limitations to available experimentation time, the limit of 500 generations was enforced. For both tasks in this experiment, the task-specific classification layer that follows the PathNet's modules consists of two fully connected nodes with Softmax-activation. A total of 600 experimental trials were conducted.  
 
 \subsection{Results}
 \label{exp1:BIN.results}
 \begin{figure}[t]
     \includegraphics[width=\textwidth]{Chapters/4.Experiments/exp1/figures/BIN_module_reuse_bargraph.pdf}
-    \caption[Module reuse for binary MNIST classification]{Distribution of module reuse in S+S and P+S searches alongside expected module reuse for random selection of modules in first and second task[green]. This plot is a result of 600 experimental runs.}
+    \caption[Module reuse for binary MNIST classification]{Distribution of module reuse in S+S(\textit{blue}) and P+S(\textit{orange}) searches alongside expected module reuse for randomly module selection for both tasks(\textit{green}). This plot is a result of 600 experimental runs.}
     \label{fig:binMNIST.hist}
 \end{figure}
 
@@ -96,7 +95,7 @@ Since this implementation is one of fully connected nodes, each neuron has to ge
     \item An evener distribution of module reuse on each layer in a path.
 \end{enumerate}
 
-Point 4 because the modules are changed from NNs to CNNs, and 1 through 3 because we increase the task difficulty and therefore also the necessary training time. 
+Point 4 is because the modules are changed from NNs to CNNs, and 1 through 3 because the task difficuly is increased and therefore also the necessary training time. 
 
 \section{Quinary MNIST classification}
 \subsection{Experimental setup}
