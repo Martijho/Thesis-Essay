@@ -7,29 +7,29 @@
     \label{fig:exp3.questions}
 \end{figure}
 \noindent
-The motivation behind reusing modules is, as mentioned in the introduction, to increase the number of tasks a PathNet can learn by decreasing the amount of new capacity a path needs to allocate for a new task. An optimal search algorithm for new paths should, therefore, be able to reuse as much knowledge as possible without limiting the performance. If we assume an ideal search algorithm would find optimal modules for each task, it should be able to find and reuse all learned knowledge if a task is learned twice. 
+The motivation behind reusing modules is, as mentioned in the introduction, to increase the number of tasks a PathNet can learn by decreasing the amount of new capacity a path needs to allocate for a new task. An optimal search algorithm for new paths should therefore be able to reuse as much knowledge as possible without limiting the performance. If we assume an ideal search algorithm would find optimal modules for each task, it should be able to find and reuse all learned knowledge if a task is learned twice. 
 
 This is put to the test by learning some task twice for all seven algorithms in chapter \ref{exp2}. As the amount of module reuse in these experiments was small, the proverbial "bar" is lowered by reducing the module search space.
 
 The experiments in this chapter relates to those in chapter \ref{exp1} and \ref{exp2} as seen in figure \ref{fig:exp3.questions}, and will attempt to answer:
 \begin{itemize}
-    \item \emph{"Given optimal conditions for module reuse, which selection pressure scheme is best suited for knowledge reuse?"}
+    \item \emph{"Given optimal conditions for module reuse, which selection pressure scheme is best suited for reusing knowledge?"}
 \end{itemize}
 
 
 \section{Description}
-The experimental structure here is the same as in chapter \ref{exp2} with two differences. The maximum tournament size used here is 10 instead of 25, and the tasks trained on is two cases of full cSVHN classification problem with all ten classes. This is to create an optimal\footnote{Optimal conditions here means learning a task where a full set of parameters is already optimized for that task.} conditions for module reuse. After searching for an optimal path for both tasks, the module reuse for the second task is noted. 
+The experimental structure here is the same as in chapter \ref{exp2} with two differences. The maximum tournament size used is 10 instead of 25, and the tasks trained on is two cases of a full cSVHN classification problem with all ten classes. This is to create optimal\footnote{Optimal conditions here means learning a task where a full set of parameters is already optimized for that task.} conditions for module reuse. After searching for an optimal path for both tasks, the module reuse for the second task is noted. 
 
-By performing this experimental trial for each algorithm multiple times, we can compare the observations of reuse with the probability of seeing these results in random module selection, and then with each other. 
+By performing this experimental trial for each algorithm multiple times, we can compare the observations of reuse with the probability of seeing these results when randomly selecting modules, and then with each other. 
 
 \section{Hypothesis}
-Based on the reuse in the previous selection pressure experiments, we do not expect any algorithm to yield perfect results\footnote{Perfect results here would constitute finding all modules used in the previous path}, but instead have a statistically significant difference from random module selection. Given the algorithms different selection pressures, they are expected to give somewhat different reuse results.
+Based on the reuse in the previous selection pressure experiments, we do not expect any algorithm to yield perfect results\footnote{Perfect results here would constitute finding all modules used in the previous path.}, but instead have a statistically significant difference from random module selection. Given the algorithms different selection pressures, they are expected to give somewhat different reuse results.
 
 As each search should be capable of reaching a decent validation accuracy on its own, it is not expected that there will be a significant difference between task 1 and task 2 for any of the algorithms. However, there is no reason to believe the effects the different tournament sizes have on accuracy will be any different than in chapter \ref{exp2}. 
 
 \section{Experimental setup}
 \label{exp3:implementation}
-The experiment structure here is a binary task problem, where we want to find two paths for a full cSVHN classification problem twice, meaning both task 1 and task 2 is cSVHN classification with all classes. The two searches should have a non-zero probability of zero reuse, so the PathNet dimensions are set to 3 layers of 6 modules each with a maximum of 3 active modules pr. paths layer. We can describe the total number of possible paths as 
+The experiment structure here is a binary task problem, where we want to find two paths for a full cSVHN classification problem twice, meaning both task 1 and task 2 is cSVHN classification with all classes. The two searches should have a non-zero probability of zero reuse, so the PathNet dimensions are set to 3 layers of 6 modules each with a maximum of 3 active modules per layer. We can describe the total number of possible paths as 
 \begin{equation*}
     \prod_{i=0}^{\omega-1}(M-i)^{L}
 \end{equation*}
@@ -51,7 +51,7 @@ We can approximate the probability of finding any number of reuse by randomly se
 \end{equation*}
 Meaning we can tell the probability of reuse to the seventh decimal place from the Monte-Carlo results. The results of the performed Monte-Carlo estimation can be found in table \ref{tab:montecarlo}.
 
-The expected reuse distribution is calculated based on the Monte-Carlo estimated probabilities, and Mann-Whitney tests is used to see how the algorithms module reuse holds up compared to expectations.
+The expected reuse distribution is calculated based on the Monte-Carlo estimated probabilities, and Mann-Whitney tests are used to see how the algorithms module reuse holds up compared to expectations.
 
 Learning from the conclusion in chapter \ref{exp2}, the algorithms maximum tournament size is reduced from 25 to 10.
 
@@ -71,7 +71,7 @@ Learning from the conclusion in chapter \ref{exp2}, the algorithms maximum tourn
 
 As the algorithms that run here are the same as in chapter \ref{exp2}, the convergence rates in figures \ref{fig:exp3.hamming} and \ref{fig:exp3.frequency} are quite similar to what we saw in section \ref{exp2:diversity}. However, the searches are run for 250 generations, which let the diversity of algorithms with low selection pressure converge further.
 
-Noteworthy about these diversity plots is that algorithm 1c in both cases converge more within the 250 generations for task 2 than task 1. Testing the null-hypothesis that the final generations population have a similar pair-wise Hamming distance for task 1 than task 2 gives a p-value of 0.00229 for a one-sided Mann-Whitney test. Confirming the observation is not due to an outlier in the data, but rather a difference in the diversity distributions. The only other algorithms that change their convergence between task 1 and task 2 are algorithms 2a and 2b for obvious reasons.  
+What is noteworthy about these diversity plots is that algorithm 1c in both cases converge more within the 250 generations for task 2 than task 1. Testing the null-hypothesis that the final generations population have a similar pair-wise Hamming distance for task 1 and task 2 gives a p-value of 0.00229 for a one-sided Mann-Whitney test. Confirming the observation is not due to an outlier in the data, but rather a difference in the diversity distributions. The only other algorithms that change their convergence between task 1 and task 2 are algorithms 2a and 2b for obvious reasons.  
 
 \subsection{Modular reuse}
 \begin{sidewaysfigure}[p!]
@@ -104,7 +104,7 @@ Running the number of MWW-tests needed to compare the individual termination lim
     \label{fig:exp3.fitness_by_evaluations}
 \end{sidewaysfigure}
 
-Figure \ref{fig:exp3.fitness} show the average tournament fitness for each generation. As with results in chapter \ref{exp2}, the algorithms with high tournament size plateau in fitness quicker than algorithms with a low tournament size.
+Figure \ref{fig:exp3.fitness} shows the average tournament fitness for each generation. As with results in chapter \ref{exp2}, the algorithms with high tournament size plateau in fitness quicker than algorithms with a low tournament size.
 
 Noteworthy features of this plot are the increase in average fitness for algorithms with low tournament size in the start of each search from task 1 to task 2, suggesting the learning for these algorithms are easier the second time around. 
 
@@ -120,4 +120,4 @@ The only difference between task 1 and task 2 is that task 2 searches among modu
 \section{Conclusion}
 These experiments do not provide any evidence for the different algorithms having any effect on the reuse of modules between tasks. As hypothesized, they did reach a higher module reuse than that of a random module selection, but as the conditions in this experiment were ideal for module reuse, this is not a huge feat.
 
-The results do provide evidence for the reuse of modules influencing the search. As seen in figure \ref{fig:exp3.fitness} the fitness improve quicker when reusing trained modules. This is not surprising, however, as this was one of the motivations behind PathNet in the first place. What is surprising is the increased convergence rate for algorithm 1c for task 2. There is no conclusive proof of this being caused by reusing modules, but the only difference between the two searches are the presence of trained modules. This result calls for more testing to both confirm this result is replicable and the determine the cause. 
+The results do provide evidence for the reuse of modules influencing the search. As seen in figure \ref{fig:exp3.fitness} the fitness improve quicker when reusing trained modules. This is not surprising, however, as this was one of the motivations behind PathNet in the first place. What is surprising is the increased convergence rate for algorithm 1c during task 2. There is no conclusive proof of this being caused by reusing modules, but the only difference between the two searches are the presence of trained modules. This result calls for more testing to both confirm this result is replicable and the determine the cause. 

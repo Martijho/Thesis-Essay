@@ -1,6 +1,6 @@
 \chapter{Implementation}
 \label{implementation}
-Machine Learning and especially Deep Learning systems are resource intensive algorithms that need large amounts of both training data and computation time. Because the computations made in ML typically is large matrix operations, it is preferable to run most of the training on GPUs. This has colored some of the implementation choices.
+Machine Learning and especially Deep Learning systems are resource intensive algorithms that need large amounts of both training data and computation time. Because the computations made in ML typically is large matrix operations, it is preferable to run most of the training on GPUs. This has coloured some of the implementation choices.
 
 This chapter contains a description of the software used to implement the ML structures and search algorithms used in the experiments in chapter \ref{exp1}, \ref{exp2}, and \ref{exp3}.
 
@@ -47,7 +47,7 @@ The Layer-objects also define other operations that can be added as needed on ob
     \item \emph{Flatten} (before the first Dense-layer). This \textit{"housekeeping"} functionality takes some n-dimensional tensor input and flattens it to a vector to be input into the fully connected NN in a Dense-layer.  
 \end{itemize}
 
-As mentioned in section \ref{background:pn}, each task has its unique task-specific final layer that defines the output from PathNet for that task. This concluding layer is defined by Task-objects which contain one layer of fully connected nodes, an activation function, and an output-size specific to that task. Only classification-tasks is performed in this thesis, so all tasks use a softmax-activation. The Task-object also contain some meta-info about the model they are a part of, such as input-dimensions, optimizer used for this task, a learning-rate, and loss-function. 
+As mentioned in section \ref{background:pn}, each task has its unique task-specific final layer that defines the output from PathNet for that task. This concluding layer is defined by Task-objects which contain one layer of fully connected nodes, an activation function, and an output-size specific to that task. Only classification-tasks are performed in this thesis, so all tasks use a softmax-activation. The Task-object also contain some meta-info about the model they are a part of, such as input-dimensions, optimizer used for this task, a learning-rate, and loss-function. 
 
 The PathNet-object is the only one utilizing the Layer and Task-objects. Through hard-coded static methods, a PathNet structure is created for each experimental run. The methods randomly initialize all layers, modules, and configurations needed to start training. The PathNet-object also contains functionality for generating random paths and Keras-models from a given path-description and Task-object. It also includes a training-counter for each module and an interface for updating this value. Lastly, there is some \textit{housekeeping} functionality such as saving and locking modules, and a TensorFlow-session backend reset (see section \ref{implementation:problems}).
 
@@ -79,14 +79,14 @@ Some implementation difficulties occurred during the work on this thesis. Most o
     \item Memory allocated by a TensorFlow session is not freed when the session ends, but when the Python process that initialized it is ended.
 \end{itemize}
 
-\section{Data sets}
+\section{Datasets}
 \subsection{MNIST}\label{Implementation:MNIST}
 One of the most commonly used datasets for testing image classifiers is the MNIST\cite{MNIST} set of hand-drawn digits. These 28-by-28 images each contain a digit from 0 through 9. The 60 000 labeled images are distributed about evenly across all ten classes. 
 
 \begin{figure}[p!]
     \centering
     \includegraphics[width=0.8\textwidth]{Chapters/3.Implementation/figures/MNIST.pdf}
-    \caption[MNIST example]{Nine images from the MNIST data set.}
+    \caption[MNIST example]{Nine images from the MNIST dataset.}
     \label{fig:mnist}
 \end{figure}
 
@@ -99,7 +99,7 @@ The Street View House Number\cite{SVHN} dataset is real-world images from Google
 \begin{figure}[p!]
     \centering
     \includegraphics[width=0.8\textwidth]{Chapters/3.Implementation/figures/cSVHN.pdf}
-    \caption[cSVHN example]{Nine images from the cSVHN data set.}
+    \caption[cSVHN example]{Nine images from the cSVHN dataset.}
     \label{fig:csvhn}
 \end{figure}
 
